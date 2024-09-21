@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>CB Movie Recommender</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+<link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Poppins:300,500&amp;display=swap'>
+<style>
+.bg{
+    width: 100%;
+    height:auto;
+	min-height:100vh;
+    background-image:url('https://wallpapercave.com/wp/wp3248769.jpg');
+    background-size: 100% 100%;
+    background-position: top center;
+  }
+
+  .content{
+margin-top: 20%;
+  }
+
+  .centered {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.InputStyle{
+  border-radius: 25px;
+  border: solid 1px white;
+ background: transparent;
+ width: 300px;
+    padding: 10px 20px;
+}
+
+
+
+input,input::-webkit-input-placeholder {
+    font-size: 15px;
+  color:white;
+}
+
+.social-btn{
+ position: absolute; 
+  bottom: 20px;
+  left: 47%;
+}
+
+i{
+ padding:5px;
+  color:white;
+
+}
+
+input, input:focus{
+  border: solid 1px white;
+        outline:0; 
+        -webkit-appearance:none;
+        box-shadow: nones;
+        -moz-box-shadow: none;
+        -webkit-box-shadow: none;
+}
+
+.secondLine{
+  font-weight: 350;
+  font-size:20px;
+  margin-bottom: 15%;
+  color: white;
+
+}
+
+.firstLine{
+font-size: 45px;
+color: white;
+}
+
+.button {
+  border: none;
+  background: transparent;
+  font-size: 25px;
+  position: relative;
+  left: -3vw;
+  top: 5px
+}
+
+@media only screen and (max-width: 600px) {
+  .firstLine{
+font-size: 20px;
+}
+}
+</style>
+</head>
+<body>
+<!--Div for Background-->
+<div class="bg text-center">
+
+  <!--Div for Centered Text & Input--> 
+  <div class="centered">
+   
+     <p class="firstLine">Cinema Wins &#127916;</p>
+   
+    <p class="secondLine">Finds perfect movie for you</p>
+    <form action="{{url_for('main')}}" method="POST">
+    <input class="InputStyle" placeholder="Enter movie title..." style="font-family:Arial, FontAwesome" id="movie_name" name="movie_name" type="text" autocorrect="off" autocapitalize="off" required > 
+    <input class="button" type="submit" value="&#128270;">
+    </form>
+    </div>
+
+    <!--Div for bottom Icons-->
+<div class="social-btn">
+			<a href="#"  title="Facebook"><i class="fa fa-facebook"></i></a>
+			<a href="#"  title="Twitter"><i class="fa fa-twitter"></i></a>
+      <p class="secondLine">M.Palka</p>
+		
+</div>
+   
+  </div>
+
+
+
+
+    <!-- <h2><u>Content Based Movie Recommendation System</u></h2>
+    <div class="movie">
+        <form action="{{ url_for('main') }}" method="POST">
+            <input type="text" id="movie_name" name="movie_name" placeholder="Enter a full movie name" autocorrect="off" autocapitalize="off" required />
+            <input type="submit" id="submission_button" value="Submit"/>
+        </form>
+  </div> -->
+  
+  <script src='https://cdn.jsdelivr.net/npm/jquery@2.2.4/dist/jquery.min.js'></script>
+<script src='https://cdn.jsdelivr.net/npm/animejs@3.1.0/lib/anime.min.js'></script>
+
+</body>
+</html>
