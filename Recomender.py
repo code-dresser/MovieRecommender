@@ -9,7 +9,9 @@ from tmdbv3api import TMDb, Movie
 class MovieRecomender:
 
     def __init__(self,movie_data) -> None:
+        self.vectorizer = TfidfVectorizer(stop_words='english',analyzer='word')
         self.movie_data = pd.read_csv(movie_data)
+        self.tfid_vector = []
         self.similarity_matrix = []
         self.features = ''
         self.title_list = self.movie_data['title'].tolist()
@@ -30,21 +32,40 @@ class MovieRecomender:
         pass
 
     def vectorise(self):
-        vectorizer = TfidfVectorizer(stop_words='english',analyzer='word')
-        tfid_vector = vectorizer.fit_transform(self.features)
-        self.similarity_matrix = cosine_similarity(tfid_vector)
+        self.tfid_vector = self.vectorizer.fit_transform(self.features)
+        self.similarity_matrix = cosine_similarity(self.tfid_vector)
         pass
 
 
-    def recomend(self,title,recomendations=5):
+    def recomend(self,title:str,recomendations:int=5) -> list:
         find_match = difflib.get_close_matches(title,self.title_list)[0]
         index_of_the_movie = self.movie_data[self.movie_data.title == find_match]['index'].values[0]
         similarity_score = list(enumerate(self.similarity_matrix[index_of_the_movie ]))
         sorted_similarity = sorted(similarity_score,key=lambda x: x[1],reverse=True)
         results = sorted_similarity[1:recomendations+1]
-        movie_indices = [self.movie_data[['title','vote_average','genres','tagline','id']].iloc[i[0]] for i in results]
-        recomendations = []
-        for rec in movie_indices:
+        movie_indices = [self.movie_data[['title','vote_average','genres','tagline','id']].iloc[i[0]] for i in results] 
+        return self.get_movie_info(movie_indices)
+
+
+    def get_keyword_recomendation(self,keywords :str,recomendations:int=5) -> list:
+        keywords = keywords.split()
+        keywords = " ".join(keywords)
+        vector = self.vectorizer.transform([keywords])
+        similarity = cosine_similarity(vector,self.tfid_vector)[0]
+        similarity_score = list(enumerate(similarity))
+        sorted_similarity = sorted(similarity_score,key=lambda x: x[1],reverse=True)
+        results = sorted_similarity[:5]
+        print(results)
+        movie_indices = [self.movie_data[['title','vote_average','genres','tagline','id']].iloc[i[0]] for i in results]          
+        return self.get_movie_info(movie_indices)
+
+    def get_suggestions(self) -> list:
+        return self.movie_data['title'].str.capitalize().tolist()
+    
+
+    def get_movie_info(self, movies :list ) -> list:
+        movies_list = []
+        for rec in movies:
             movie = Movie()
             search = movie.search(rec.iloc[0])
             if search:
@@ -53,22 +74,13 @@ class MovieRecomender:
                 base_url = 'https://image.tmdb.org/t/p/original'
                 poster_url = pd.Series(f"{base_url}{poster_path}")
                 rec = pd.concat([rec,poster_url],ignore_index=True)
-                recomendations.append(rec)
-                
-        return recomendations
-
-        # for i in range(recomendations):
-        #     movie = sorted_similarity[i+1]
-        #     index = movie[0]
-        #     title_from_index = self.movie_data[self.movie_data.index == index]['title'].values[0]
-        #     print(i, '.', title_from_index)
-
-    def get_suggestions(self):
-        return self.movie_data['title'].str.capitalize().tolist()
+                movies_list.append(rec) 
+        return movies_list
     
 # recomender = MovieRecomender("movies.csv")
 # recomender.select_features(['genres', 'keywords', 'tagline', 'cast', 'director'])
 # recomender.vectorise()
-# # print(recomender.get_suggestions())
-# result = recomender.recomend(input("What is yours favourite movie:  "))
-# print(result[0]['title'])
+# # # print(recomender.get_suggestions())
+# # result = recomender.recomend(input("What is yours favourite movie:  "))
+# # print(result[0]['title'])
+# recomender.get_keyword_recomendation("Christopher Nolan")

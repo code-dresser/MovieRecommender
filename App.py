@@ -16,6 +16,13 @@ def main():
         result_final = recomender.recomend(m_name)
         return flask.render_template('found.html',movies=result_final,search_name=m_name)
 
+
+@app.route("/keywords",methods=['POST'])
+def keywords_recomendation():
+    if flask.request.method == 'POST':
+        keywords = " ".join(flask.request.form['keywords'].split())
+        result_final = recomender.get_keyword_recomendation(keywords)
+        return flask.render_template('found.html',movies=result_final,search_name=keywords)
 if __name__ == '__main__':
     app.run(host="127.0.0.1", port=8080, debug=True)
     #app.run()
