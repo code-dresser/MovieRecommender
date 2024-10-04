@@ -1,15 +1,15 @@
 import numpy as np
 import pandas as pd
 import difflib
-from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.feature_extraction.text import TfidfVectorizer,CountVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from tmdbv3api import TMDb, Movie
 
 
 class MovieRecomender:
 
-    def __init__(self,movie_data) -> None:
-        self.vectorizer = TfidfVectorizer(stop_words='english',analyzer='word')
+    def __init__(self,movie_data,tfidf=True) -> None:
+        self.vectorizer = TfidfVectorizer(stop_words='english',analyzer='word') if tfidf else CountVectorizer(stop_words="english")
         self.movie_data = pd.read_csv(movie_data)
         self.tfid_vector = []
         self.similarity_matrix = []
@@ -26,18 +26,17 @@ class MovieRecomender:
     def select_features(self, feature_list :list) -> None:
         for feature in feature_list:
             self.movie_data[feature] = self.movie_data[feature].fillna('')
-
-        for feature in feature_list:
             self.features += self.movie_data[feature] + ' '
         pass
 
     def vectorise(self):
         self.tfid_vector = self.vectorizer.fit_transform(self.features)
-        self.similarity_matrix = cosine_similarity(self.tfid_vector)
+        self.similarity_matrix = cosine_similarity(self.tfid_vector,self.tfid_vector)
         pass
 
 
     def recomend(self,title:str,recomendations:int=5) -> list:
+        print(title,type(self.title_list[0]))
         find_match = difflib.get_close_matches(title,self.title_list)[0]
         index_of_the_movie = self.movie_data[self.movie_data.title == find_match]['index'].values[0]
         similarity_score = list(enumerate(self.similarity_matrix[index_of_the_movie ]))
@@ -55,7 +54,6 @@ class MovieRecomender:
         similarity_score = list(enumerate(similarity))
         sorted_similarity = sorted(similarity_score,key=lambda x: x[1],reverse=True)
         results = sorted_similarity[:5]
-        print(results)
         movie_indices = [self.movie_data[['title','vote_average','genres','tagline','id']].iloc[i[0]] for i in results]          
         return self.get_movie_info(movie_indices)
 
