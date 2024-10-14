@@ -14,7 +14,7 @@ class MovieRecomender:
         self.tfid_vector = []
         self.similarity_matrix = []
         self.features = ''
-        self.title_list = self.movie_data['title'].tolist()
+        self.title_list = self.movie_data['Title'].tolist()
         self.tmdb = TMDb()
         self.tmdb.api_key = "1cdf6c52a3c228e5f6cb4d02386e54e7"
         pass
@@ -36,13 +36,12 @@ class MovieRecomender:
 
 
     def recomend(self,title:str,recomendations:int=5) -> list:
-        print(title,type(self.title_list[0]))
         find_match = difflib.get_close_matches(title,self.title_list)[0]
-        index_of_the_movie = self.movie_data[self.movie_data.title == find_match]['index'].values[0]
+        index_of_the_movie = self.movie_data[self.movie_data.Title == find_match]['index'].values[0]
         similarity_score = list(enumerate(self.similarity_matrix[index_of_the_movie ]))
         sorted_similarity = sorted(similarity_score,key=lambda x: x[1],reverse=True)
         results = sorted_similarity[1:recomendations+1]
-        movie_indices = [self.movie_data[['title','vote_average','genres','tagline','id']].iloc[i[0]] for i in results] 
+        movie_indices = [self.movie_data[['Title','Rating_average','Genres','Tagline','TMDb_Id']].iloc[i[0]] for i in results] 
         return self.get_movie_info(movie_indices)
 
 
@@ -54,11 +53,11 @@ class MovieRecomender:
         similarity_score = list(enumerate(similarity))
         sorted_similarity = sorted(similarity_score,key=lambda x: x[1],reverse=True)
         results = sorted_similarity[:5]
-        movie_indices = [self.movie_data[['title','vote_average','genres','tagline','id']].iloc[i[0]] for i in results]          
+        movie_indices = [self.movie_data[['Title','Rating_average','Genres','Tagline','TMDb_Id']].iloc[i[0]] for i in results]          
         return self.get_movie_info(movie_indices)
 
     def get_suggestions(self) -> list:
-        return self.movie_data['title'].str.capitalize().tolist()
+        return self.movie_data['Title'].str.capitalize().tolist()
     
 
     def get_movie_info(self, movies :list ) -> list:
@@ -75,10 +74,13 @@ class MovieRecomender:
                 movies_list.append(rec) 
         return movies_list
     
-# recomender = MovieRecomender("movies.csv")
-# recomender.select_features(['genres', 'keywords', 'tagline', 'cast', 'director'])
+# recomender = MovieRecomender("movies10000.csv")
+# recomender.select_features(["Overview","Genres","Cast","Crew",'Tagline'])
 # recomender.vectorise()
 # # # print(recomender.get_suggestions())
-# # result = recomender.recomend(input("What is yours favourite movie:  "))
-# # print(result[0]['title'])
-# recomender.get_keyword_recomendation("Christopher Nolan")
+# result = recomender.recomend(input("What is yours favourite movie:  "))
+# for r in result:
+#     print(r[0])
+# result = recomender.get_keyword_recomendation("Christopher Nolan")
+# for r in result:
+#     print(r[0])

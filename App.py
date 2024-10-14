@@ -1,7 +1,7 @@
 import flask
 import Recomender
-recomender = Recomender.MovieRecomender("movies.csv")
-recomender.select_features(['genres', 'keywords', 'cast', 'director'])
+recomender = Recomender.MovieRecomender("movies10000.csv")
+recomender.select_features(["Overview","Genres","Cast","Crew",'Tagline'])
 recomender.vectorise()
 app = flask.Flask(__name__, template_folder='templates')
 # Set up the main route
