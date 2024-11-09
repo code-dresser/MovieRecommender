@@ -23,7 +23,6 @@ class MovieRecomender:
     def get_popular_movies(self) :
         new_movie_df = self.movie_data.sort_values("popularity",ascending=False).head(9)
         movie_indices = [new_movie_df[['title','vote_average','genres','tagline','id']].iloc[i] for i in range(len(new_movie_df))] 
-        print(movie_indices)
         return self.get_movie_info(movie_indices)
         
     def load_movie_data(self,path :str) -> None:
@@ -79,9 +78,13 @@ class MovieRecomender:
             movie = Movie()
             search = movie.search(rec.iloc[0])
             if search:
-                details = movie.details(rec.iloc[-1])
-                poster_path = details.poster_path
-                base_url = 'https://image.tmdb.org/t/p/original'
+                try :
+                    details = movie.details(rec.iloc[-1])
+                    base_url = 'https://image.tmdb.org/t/p/original'
+                    poster_path = details.poster_path
+                except :
+                    poster_path = "default-movie.png"
+                    base_url = "/static/"
                 poster_url = pd.Series(f"{base_url}{poster_path}")
                 rec = pd.concat([rec,poster_url],ignore_index=True)
                 movies_list.append(rec) 
