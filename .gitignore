@@ -1,2 +1,4 @@
 /.venv
 /__pycache__
+blueprints/public/__pycache__
+blueprints/__pycache__
