@@ -4,7 +4,8 @@ import difflib
 from sklearn.feature_extraction.text import TfidfVectorizer,CountVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
 from tmdbv3api import TMDb, Movie
-
+from dotenv import load_dotenv
+import os
 
 class MovieRecomender:
 
@@ -16,7 +17,8 @@ class MovieRecomender:
         self.features = ''
         self.title_list = self.movie_data['title'].tolist()
         self.tmdb = TMDb()
-        self.tmdb.api_key = "1cdf6c52a3c228e5f6cb4d02386e54e7"
+        load_dotenv()
+        self.tmdb.api_key = os.getenv("TMDB_API_KEY") 
         pass
     
 
