@@ -45,13 +45,19 @@
           <li class="nav-item active">
             <a class="nav-link active" aria-current="page" href="{{ url_for('public.main') }}">Home</a>
           </li>
+          <li class="nav-item ">
+            <a class="nav-link active" aria-current="page" href="{{ url_for('auth.login_page') }}">Login</a>
+          </li>
+          <li class="nav-item ">
+            <a class="nav-link active" aria-current="page" href="{{ url_for('auth.signup_page') }}">Sign Up</a>
+          </li>
         </ul>
         {% block searchbar %}
-        <ul class="navbar-nav ms-automb-2 mb-lg-0 w-25">
-          <form class="d-flex input-group w-100" action="{{url_for('public.keywords_recomendation')}}" method="POST">
+        <ul class="navbar-nav ms-automb-2 mb-lg-0 w-25 d-flex justify-content-end">
+          <form class="d-flex input-group w-75" action="{{url_for('public.keywords_recomendation')}}" method="POST">
             <input
               type="search"
-              class="form-control bg-transparent"
+              class="form-control bg-transparent "
               placeholder="Search tags,actors..."
               aria-label="Search"
               name="keywords"
