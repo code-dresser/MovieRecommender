@@ -1,5 +1,9 @@
 /.venv
 /__pycache__
-blueprints/public/
-blueprints/auth/__pycache__
-blueprints/__pycache__
+App/__pycache__
+App/blueprints/public/
+App/blueprints/auth/__pycache__
+App/blueprints/__pycache__
+/App/.env
+/App/*.csv
+/App/*.db
