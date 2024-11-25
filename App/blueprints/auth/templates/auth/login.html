@@ -41,6 +41,11 @@
                 {%endwith%}
                 {%for user in users %}
                   <p>{{user.Username}}-{{user.User_ID}}</p>
+                  <p>
+                    {%for review in user.reviews%}
+                      {{review.review_text}}---{{review.review_author.Username}}----{{review.movie.title}}<br/>
+                    {%endfor%}
+                  </p>
                 {%endfor%}
               <!-- Email input -->
               <div class="form-outline mb-4" data-mdb-input-init>
