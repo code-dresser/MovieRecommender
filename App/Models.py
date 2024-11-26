@@ -2,6 +2,7 @@ from sqlalchemy import String
 from typing import Optional
 import sqlalchemy.orm as so
 from .extentions import db
+from flask_login import UserMixin
 
 
 
@@ -9,14 +10,14 @@ from .extentions import db
 
 watchlist = db.Table(
     "Watchlist",
-    db.Column("User_ID",db.Integer,db.ForeignKey('Users.User_ID')),
+    db.Column("User_ID",db.Integer,db.ForeignKey('Users.id')),
     db.Column("Movie_ID",db.Integer,db.ForeignKey('Movies.index')),
 )
 
 class Review(db.Model):
     __tablename__ = "Reviews"
     Review_ID: so.Mapped[int] = so.mapped_column(primary_key=True)
-    User_ID = db.Column("User_ID",db.Integer,db.ForeignKey('Users.User_ID'))
+    User_ID = db.Column("User_ID",db.Integer,db.ForeignKey('Users.id'))
     Movie_ID = db.Column("Movie_ID",db.Integer,db.ForeignKey('Movies.index'))
     rating: so.Mapped[float] = so.mapped_column(nullable=False)
     review_text:so.Mapped[str] = so.mapped_column(String(250))
@@ -24,14 +25,15 @@ class Review(db.Model):
        return '<Review {} {}>'.format(self.Review_ID,self.review_text)    
    
    
-class User(db.Model):
+class User(UserMixin,db.Model):
     __tablename__ = "Users"
-    User_ID :so.Mapped[int] = so.mapped_column(primary_key=True)
+    id :so.Mapped[int] = so.mapped_column(primary_key=True)
     Username :so.Mapped[str] = so.mapped_column(String(50),nullable=False)
+    Email :so.Mapped[str] = so.mapped_column(String(100),nullable=False)
     Password:so.Mapped[Optional[str]] = so.mapped_column(String(120),nullable=False)
     Password_hash:so.Mapped[Optional[str]] = so.mapped_column(String(120),nullable=False)
-    Bio:so.Mapped[Optional[str]]= so.mapped_column(String(250),nullable=False)
-    avatar:so.Mapped[Optional[str]] = so.mapped_column(String(120),nullable=False)
+    Bio:so.Mapped[Optional[str]]= so.mapped_column(String(250),nullable=True)
+    avatar:so.Mapped[Optional[str]] = so.mapped_column(String(120),nullable=True)
     reviews = db.relationship("Review", backref='author')
     watchlist = db.relationship("Movie",secondary=watchlist, backref='watched_by')
     def __repr__(self) -> str:

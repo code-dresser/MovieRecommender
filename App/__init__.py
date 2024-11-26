@@ -2,7 +2,7 @@ import flask
 from .blueprints.public.public import public
 from .blueprints.auth.auth import auth
 from dotenv import load_dotenv
-from .extentions import db
+from .extentions import db,bcrypt,login_manager
 import os
 
 def create_app():
@@ -14,6 +14,15 @@ def create_app():
     app.config['FLASK_ENV'] = 'development'
     app.config['DEBUG'] = True
     db.init_app(app)
+    login_manager.login_view='auth.login_page'
+    login_manager.init_app(app)
+    bcrypt.init_app(app)
+    
+    from .Models import User
+    
+    @login_manager.user_loader
+    def load_user(User_ID):
+        return User.query.get(int(User_ID))
     # Set up the main route
     app.register_blueprint(public)
     app.register_blueprint(auth)
