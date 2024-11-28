@@ -9,8 +9,6 @@ auth = Blueprint("auth",__name__,template_folder="templates/auth", url_prefix="/
 
 @auth.route("/login",methods=["GET","POST"])
 def login_page():
-    
-    users = User.query.order_by(User.Username).all()
     login_form = LoginForm()
     if login_form.validate_on_submit():
         email= login_form.email.data
@@ -28,7 +26,7 @@ def login_page():
     else:
         for error in login_form.errors.items():
             flash(f"{" ".join(error[1])}")
-    return render_template("login.html",form=login_form,users=users)
+    return render_template("login.html",form=login_form)
 
 @auth.route("/signup",methods=["GET","POST"])
 def signup_page():

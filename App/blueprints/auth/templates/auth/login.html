@@ -39,9 +39,6 @@
               </div>
                 {%endif%}
                 {%endwith%}
-                {%for user in users %}
-                  <p>{{user.Username}}-{{user.User_ID}}---Reviews:{{user.reviews|length}}---Watchlist:{{user.watchlist|length}}</p>
-                {%endfor%}
               <!-- Email input -->
               <div class="form-outline mb-4" data-mdb-input-init>
                 {{form.email(class_="form-control")}}
