@@ -23,9 +23,8 @@ class MovieRecomender:
     
 
     def get_popular_movies(self) :
-        new_movie_df = self.movie_data.sort_values("popularity",ascending=False).head(9)
-        movie_indices = [new_movie_df[['title','vote_average','genres','tagline','id']].iloc[i] for i in range(len(new_movie_df))] 
-        return self.get_movie_info(movie_indices)
+        movie_indices = self.movie_data.sort_values("score",ascending=False).head(9)
+        return movie_indices['id'].values.tolist()
         
     def load_movie_data(self,path :str) -> None:
         self.movie_data = pd.read_csv(path)
@@ -49,8 +48,8 @@ class MovieRecomender:
         similarity_score = list(enumerate(self.similarity_matrix[index_of_the_movie ]))
         sorted_similarity = sorted(similarity_score,key=lambda x: x[1],reverse=True)
         results = sorted_similarity[1:recomendations+1]
-        movie_indices = [self.movie_data[['title','vote_average','genres','overview','id']].iloc[i[0]] for i in results] 
-        return self.get_movie_info(movie_indices)
+        movie_indices = [ int(self.movie_data[['id']].iloc[i[0]].values) for i in results] 
+        return movie_indices
 
 
     def get_keyword_recomendation(self,keywords :str,recomendations:int=6) -> list:
@@ -65,32 +64,15 @@ class MovieRecomender:
         return self.get_movie_info(movie_indices)
 
     def get_suggestions(self) -> list:
-        return self.movie_data['title'].str.capitalize().tolist()
+        return self.movie_data['title'].str.title().tolist()
     
     def get_movie_data(self,  title :str) -> list:
         find_match = difflib.get_close_matches(title,self.title_list)[0]
         index_of_the_movie = self.movie_data[self.movie_data.title == find_match]['index'].values[0]
-        movie = self.movie_data[['title','vote_average','genres','overview','id']].iloc[index_of_the_movie]
-        return self.get_movie_info([movie])
+        movie = self.movie_data["id"].iloc[index_of_the_movie]
+        return int(movie)
     
 
-    def get_movie_info(self, movies :list ) -> list:
-        movies_list = []
-        for rec in movies:
-            movie = Movie()
-            search = movie.search(rec.iloc[0])
-            if search:
-                try :
-                    details = movie.details(rec.iloc[-1])
-                    base_url = 'https://image.tmdb.org/t/p/original'
-                    poster_path = details.poster_path
-                except :
-                    poster_path = "default-movie.png"
-                    base_url = "/static/"
-                poster_url = pd.Series(f"{base_url}{poster_path}")
-                rec = pd.concat([rec,poster_url],ignore_index=True)
-                movies_list.append(rec) 
-        return movies_list
     
 # recomender = MovieRecomender("movies10000.csv")
 # recomender.select_features(["overview","genres","Cast","Crew",'Tagline'])

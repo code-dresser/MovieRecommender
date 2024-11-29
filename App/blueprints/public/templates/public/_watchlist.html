@@ -1,0 +1,19 @@
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<div class="alert alert-warning alert-dismissible fade show" role="alert">
+<ul>
+    {% for message in messages %}
+    <li style="font-size: 12pt;">{{ message }}</li>
+    {% endfor %}
+</ul>
+<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{%endif%}
+{%endwith%}
+<ul>
+    {% for movie in current_user.watchlist%}
+        <li>
+            {{movie.id}} --- {{movie.title|title}} --- {{movie.vote_average}} --- {{movie.release_date}} --- Reviews: {{movie.reviews|length}} --- <button onclick="watchlist_del('{{movie.id}}')">Delete from watchlist</button>
+        </li>
+    {% endfor %}
+</ul>

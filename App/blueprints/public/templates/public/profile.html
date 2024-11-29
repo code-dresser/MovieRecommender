@@ -1,5 +1,66 @@
 <html>
 <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta http-equiv="x-ua-compatible" content="ie=edge" />
+    <link rel="shortcut icon" href="{{ url_for('static', filename='logo.ico') }}">
+    <title>Cinema Wins</title>
+<!---->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<!-- Font Awesome -->
+<link
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+  rel="stylesheet"
+/>
+<!-- Google Fonts -->
+<link
+  href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+  rel="stylesheet"
+/>
+<!-- MDB -->
+<link
+  href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/8.0.0/mdb.min.css"
+  rel="stylesheet"
+/>
+<script src="{{url_for('static',filename='autocomplete.js')}}"></script>
+<script>
+var title = []
+$(document).ready( function() {
+    $.get("/titles",function(data) {
+        const title_list = data;
+        title = data;
+        set_autocomplete('movies', 'form_complete', title_list, start_at_letters=2, count_results=3);
+    });
+
+    document.getElementById('myForm').addEventListener('submit', function(event) {
+    event.preventDefault();
+    // Perform validation or other operations
+    $.post( '/profile/add/movie', $('#myForm').serialize(), function(data) {
+        $("#watchlist").html(data);
+       }
+    );
+});
+
+    
+})
+function watchlist_del(movie_id) {
+    $.get("/profile/del/" + movie_id, function(data) {
+        $("#watchlist").html(data);
+    });
+}
+
+function review_del(movie_id) {
+    $.get("/profile/del/review/" + movie_id, function(data) {
+        $("#reviews").html(data);
+    });
+}
+
+
+
+</script>
+
 
 </head>
 <body>
@@ -7,32 +68,39 @@
 
 <form action="{{url_for('public.add_review')}}" method="post" novalidate enctype="multipart/form-data">
  {{ form.csrf_token }}
- {{form.movie_ID.label}}{{form.movie_ID()}} 
+ {{form.movie_ID(value=12)}} 
  {{form.rating.label}}{{form.rating()}} 
  {{form.review_text.label}}{{form.review_text()}} 
  {{form.submit()}}
 </form>
  
  <h2>Your reviews</h2>
- <ul>
-    {% for review in current_user.reviews%}
-        <li>
-            {{review.Review_ID}} --- {{review.movie.title}} --- {{review.rating}} --- {{review.review_text}} 
-        </li>
-    {% endfor %}
- </ul>
+<div id="reviews">
+    {% include '_reviews.html'%}
+</div>
 
  <h2>Your movies</h2>
- <ul>
-    {% for movie in current_user.watchlist%}
-        <li>
-            {{movie.id}} --- {{movie.title}} --- {{movie.vote_average}} --- {{movie.release_date}} --- Reviews: {{movie.reviews|length}} 
-        </li>
-    {% endfor %}
- </ul>
+ <form class="form-inline" id="myForm">
+        <div class="row">
+          <div class="col-6 ">
+            <input type="text" class="form-control  form-control-lg bg-secondary " name="movie" id="movies" />
+            <div class="position-absolute invisible bg-black" style="color:black" id="form_complete"></div>
+          </div>
+          <div class="col-2">
+            <input type="submit" class="form-control  btn btn-primary" id="submitButton" value="Dodaj"/>
+          </div>
+        </div>
+ </form>
+ <div id="watchlist">
+    {% include '_watchlist.html'%}
+ </div>
+
 
 <a href="{{url_for('auth.logout')}}">Logout</a>
-
+<script
+  type="text/javascript"
+  src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/8.0.0/mdb.umd.min.js"
+></script>
 </body>
 
 </html>
