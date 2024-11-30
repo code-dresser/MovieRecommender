@@ -1,7 +1,41 @@
-<ul>
+<div class="accordion  " id="accordionExample">
     {% for review in current_user.reviews%}
-        <li>
-            {{review.Review_ID}} --- {{review.movie.title|title}} --- {{review.rating}} --- {{review.review_text}} ---- <button onclick="review_del('{{review.Review_ID}}')">Delete review</button>
-        </li>
+        <div class="accordion-item bg-dark my-3">
+            <h2 class="accordion-header" id="heading{{review.Review_ID}}">
+                <button
+                    data-mdb-collapse-init
+                    class="accordion-button"
+                    type="button"
+                    data-mdb-target="#collapse{{review.Review_ID}}"
+                    aria-expanded="true"
+                    aria-controls="collapse{{review.Review_ID}}"
+                >
+                   <h5 class="me-3">{{review.movie.title|title}} </h5> 
+                   <h5 class="d-none d-md-block">
+                    {% for i in range(0,review.rating|int)%} 
+                        <i class="fas fa-star" style="color:#ffca08"></i> 
+                    {%endfor%} 
+                    {% if review.rating|int < 5 %} 
+                        {%for i in range(review.rating|int,5)%} 
+                            <i class="far fa-star"></i> 
+                        {% endfor %} 
+                    {% endif %} 
+                   </h5>
+                </button>
+            </h2>
+            <div id="collapse{{review.Review_ID}}" class="accordion-collapse collapse" aria-labelledby="heading{{review.Review_ID}}" data-mdb-parent="#accordionExample">
+                <div class="accordion-body text-white ">
+                    <div class="mb-4">
+                        <h5>{{review.title}}</h5>
+                        <p>{{review.review_text}}</p>
+                    </div>
+                    <div>
+                        <button class="btn btn-secondary">Edit review</button>
+                        <button onclick="review_del('{{review.Review_ID}}')" class="btn btn-primary">Delete review</button>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
     {% endfor %}
- </ul>
+</div>
