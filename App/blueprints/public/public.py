@@ -10,6 +10,7 @@ recomender.select_features(['title','tagline','genres','cast','director','writer
 recomender.vectorise()
 public = Blueprint("public", __name__,template_folder="templates/public")
 
+# Index page
 @public.route('/', methods=['GET'])
 def main():
     # Number of items per sublist 
@@ -24,33 +25,21 @@ def main():
     sublists = [movies[i:i + n] for i in range(0, len(movies),n)]
     return render_template('index.html',movies=sublists)
 
+# Search results
 @public.route('/found', methods=['POST'])
 def recomendation():
-    m_name = " ".join(request.form['movie_name'].split())
-    result_final = []
-    search= []
-    # Movies recomendation
-    for id in recomender.recomend(m_name):
-        movie = Movie.query.filter(Movie.id == id).first()
-        if movie:
-            poster_path = "https://image.tmdb.org/t/p/original" + movie.poster_path if movie.poster_path != "" else url_for('static','default-movie.png')
-            result_final.append([movie.title,"{:.2f}".format(movie.vote_average),movie.genres,movie.overview,movie.id,poster_path])
-            
-    # Searched movie
-    movie = Movie.query.filter(Movie.id == recomender.get_movie_data(m_name)).first()
-    print(movie)
-    if movie:
-        poster_path = "https://image.tmdb.org/t/p/original" + movie.poster_path if movie.poster_path != "" else url_for('static','default-movie.png')
-        search = [movie.title,"{:.2f}".format(movie.vote_average),movie.genres,movie.overview,movie.id,poster_path]
-        print(search)
-    return render_template('found.html',movies=result_final,search=search)
+    prompt = " ".join(request.form['movie_name'].split()).lower()
+    if prompt in recomender.title_list:
+        # Movies recomendation
+        result_final = movie_info(recomender.recomend(prompt))
+        # Searched movie
+        search = movie_info(recomender.get_movie_id(prompt))
+        return render_template('found.html',movies=result_final,search=search)
+    else:
+        result_final = movie_info(recomender.get_keyword_recomendation(prompt))
+        return render_template('found.html',movies=result_final,search_name=prompt.capitalize())
 
-@public.route("/keywords",methods=['POST'])
-def keywords_recomendation():
-    if  request.method == 'POST':
-        keywords = " ".join(request.form['keywords'].split())
-        result_final = recomender.get_keyword_recomendation(keywords)
-        return render_template('found.html',movies=result_final,search_name=keywords)
+
     
 
 @public.route("/profile",methods=['GET'])    
@@ -99,13 +88,18 @@ def add_review():
     form = ReviewForm()
     if form.validate_on_submit():
         movie_id = form.movie_ID.data
+        title= form.title.data
         rating = form.rating.data
         review_text = form.review_text.data
         movie = Movie.query.filter_by(id=movie_id).first()
         if movie:
-            review = Review(User_ID = current_user.id,Movie_ID=movie.index,rating=rating,review_text=review_text)
+            review = Review(User_ID = current_user.id,Movie_ID=movie.index,title=title,rating=rating,review_text=review_text)
             current_user.reviews.append(review)
             db.session.commit()
+        else:
+            flash("Unable to add movie to db")
+    else:
+        flash("Form not validated")
     return redirect(url_for("public.profile"))
 
 
@@ -122,3 +116,20 @@ def del_review(id):
 @public.route("/titles")
 def get_titles():
     return jsonify(recomender.get_suggestions())
+
+def movie_info(ids: list) -> list:
+    if isinstance(ids,list):
+        result = []
+        for id in ids:
+            movie = Movie.query.filter(Movie.id == id).first()
+            if movie:
+                poster_path = "https://image.tmdb.org/t/p/original" + movie.poster_path if movie.poster_path != "" else url_for('static',filename='default-movie.png')
+                result.append([movie.title,"{:.2f}".format(movie.vote_average),movie.genres,movie.overview,movie.id,poster_path])
+        return result
+    else:
+        movie = Movie.query.filter(Movie.id == ids).first()
+        print(movie)
+        if movie:
+            poster_path = "https://image.tmdb.org/t/p/original" + movie.poster_path if movie.poster_path != "" else url_for('static',filename='default-movie.png')
+            result = [movie.title,"{:.2f}".format(movie.vote_average),movie.genres,movie.overview,movie.id,poster_path]
+            return result   

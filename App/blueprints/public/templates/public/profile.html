@@ -6,7 +6,6 @@
     <link rel="shortcut icon" href="{{ url_for('static', filename='logo.ico') }}">
     <title>Cinema Wins</title>
 <!---->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <!-- Font Awesome -->
@@ -26,11 +25,9 @@
 />
 <script src="{{url_for('static',filename='autocomplete.js')}}"></script>
 <script>
-var title = []
 $(document).ready( function() {
     $.get("/titles",function(data) {
         const title_list = data;
-        title = data;
         set_autocomplete('movies', 'form_complete', title_list, start_at_letters=2, count_results=3);
     });
 
@@ -60,20 +57,94 @@ function review_del(movie_id) {
 
 
 </script>
+<style>
+.starrating > input {display: none;}  /* Remove radio buttons */
 
+.starrating > label:before { 
+  content: "\f005"; /* Star */
+  margin: 2px;
+  font-size: 3em;
+  font-family: FontAwesome;
+  display: inline-block; 
+}
+
+.starrating > label
+{
+  color: #222222; /* Start color when not clicked */
+}
+
+.starrating > input:checked ~ label
+{ color: #ffca08 ; } /* Set yellow color when star checked */
+
+.starrating > input:hover ~ label
+{ color: #ffca08 ;  } /* Set yellow color when star hover */
+
+</style>
 
 </head>
 <body>
  <h3> Welcome {{current_user.Username}}</h3>
 
-<form action="{{url_for('public.add_review')}}" method="post" novalidate enctype="multipart/form-data">
- {{ form.csrf_token }}
- {{form.movie_ID(value=12)}} 
- {{form.rating.label}}{{form.rating()}} 
- {{form.review_text.label}}{{form.review_text()}} 
- {{form.submit()}}
-</form>
- 
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="staticBackdrop"
+  data-mdb-backdrop="static"
+  data-mdb-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="staticBackdropLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered  modal-lg modal-fullscreen-sm-down">
+    <div class="modal-content bg-dark text-white">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Dodaj Recenzję</h5>
+        <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form action="{{url_for('public.add_review')}}" method="post" enctype="multipart/form-data">
+      <div class="modal-body">
+          <!-- Name input -->
+          {{ form.csrf_token }}
+           {{form.movie_ID()}}
+          <div data-mdb-input-init class="form-outline mb-4">
+            {{form.title(class_="form-control")}}
+            <!-- <input type="text" id="form4Example1" class="form-control" /> -->
+            <label class="form-label" for="title">Tytuł</label>
+          </div>
+
+          <!-- Email input -->
+          <div data-mdb-input-init class="form-outline mb-4">
+            <div class="container">
+              <div>Ocena </div>
+              <div class="starrating risingstar d-flex justify-content-center flex-row-reverse">
+                {% for subfield in form.rating|reverse%}
+                  {{subfield}}{{subfield.label}}
+                {% endfor %}
+             </div>
+            </div>
+          </div>
+
+          <!-- Message input -->
+          <div data-mdb-input-init class="form-outline mb-4">
+            <!-- <textarea class="form-control" id="form4Example3" rows="4"></textarea> -->
+             {{form.review_text(class_="form-control",rows="4")}}
+            <label class="form-label" for="form4Example3">Treść recenzji</label>
+          </div>
+
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-mdb-ripple-init data-mdb-dismiss="modal">Close</button>
+        {{form.submit(class_="btn btn-primary",value="Zapisz")}}
+        <!-- <input  type="submit" class="btn btn-primary"  value="Zapisz" data-mdb-ripple-init /> -->
+      </div>
+    </form>
+    </div>
+  </div>
+</div>
+
+
  <h2>Your reviews</h2>
 <div id="reviews">
     {% include '_reviews.html'%}
@@ -101,6 +172,7 @@ function review_del(movie_id) {
   type="text/javascript"
   src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/8.0.0/mdb.umd.min.js"
 ></script>
+
 </body>
 
 </html>

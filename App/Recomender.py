@@ -60,13 +60,13 @@ class MovieRecomender:
         similarity_score = list(enumerate(similarity))
         sorted_similarity = sorted(similarity_score,key=lambda x: x[1],reverse=True)
         results = sorted_similarity[1:recomendations+1]
-        movie_indices = [self.movie_data[['title','vote_average','genres','overview','id']].iloc[i[0]] for i in results]          
-        return self.get_movie_info(movie_indices)
+        movie_indices = [ int(self.movie_data[['id']].iloc[i[0]].values) for i in results]        
+        return movie_indices
 
     def get_suggestions(self) -> list:
         return self.movie_data['title'].str.title().tolist()
     
-    def get_movie_data(self,  title :str) -> list:
+    def get_movie_id(self,  title :str) -> list:
         find_match = difflib.get_close_matches(title,self.title_list)[0]
         index_of_the_movie = self.movie_data[self.movie_data.title == find_match]['index'].values[0]
         movie = self.movie_data["id"].iloc[index_of_the_movie]

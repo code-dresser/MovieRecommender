@@ -83,8 +83,7 @@ function renderResults(results, search, container, form_id, max_results) {
                 a.style.fontSize = form_font;
                 a.href = '#';
                 a.style.color = "white";
-                // see function below - marked search string in results
-                a.innerHTML = item;//colored_result(item, search);
+                a.innerHTML = item;
 
                 // add Eventlistener for search renderResults
                 a.addEventListener("click", function(event) {

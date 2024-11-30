@@ -17,7 +17,7 @@ def login_page():
         user = User.query.filter_by(Email=email).first()
         if not user or not bcrypt.check_password_hash(user.Password_hash,password):
             flash('Please check your login details and try again.')
-            return redirect(url_for('auth.login'))
+            return redirect(url_for('auth.login_page'))
         else:
             login_user(user,remember=remember_me)
             print(email,password,remember_me)

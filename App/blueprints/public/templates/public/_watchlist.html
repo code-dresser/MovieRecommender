@@ -13,7 +13,11 @@
 <ul>
     {% for movie in current_user.watchlist%}
         <li>
-            {{movie.id}} --- {{movie.title|title}} --- {{movie.vote_average}} --- {{movie.release_date}} --- Reviews: {{movie.reviews|length}} --- <button onclick="watchlist_del('{{movie.id}}')">Delete from watchlist</button>
+            {{movie.id}} --- {{movie.title|title}} --- {{movie.vote_average}} --- {{movie.release_date}} --- Reviews: {{movie.reviews|length}} --- <button onclick="watchlist_del('{{movie.id}}')">Delete from watchlist</button> 
+             <!-- Button trigger modal -->
+            <button type="button" class="btn btn-primary" data-mdb-ripple-init data-mdb-modal-init data-mdb-target="#staticBackdrop" onclick="$('#movie_id').val('{{movie.id}}')">
+              <i class="far fa-square-plus pe-none" style="font-size: 1.5em;"></i>
+            </button>
         </li>
     {% endfor %}
 </ul>

@@ -6,6 +6,8 @@
     <meta http-equiv="x-ua-compatible" content="ie=edge" />
     <link rel="shortcut icon" href="{{ url_for('static', filename='logo.ico') }}">
     <title>Cinema Wins</title>
+<!-- JQuery -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 <!---->
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
@@ -24,6 +26,18 @@
   href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/8.0.0/mdb.min.css"
   rel="stylesheet"
 />
+<script src="{{url_for('static',filename='autocomplete.js')}}"></script>
+<script>
+  $(document).ready( function() {
+  $.get("/titles",function(data) {
+      const title_list = data;
+      if ($('#search_bar').length) {
+        set_autocomplete('search_bar', 'form_complete1', title_list, start_at_letters=2, count_results=3);
+      }
+      
+  });
+});
+</script>
 {% block style %}
 
 {% endblock %}
@@ -66,14 +80,20 @@
         </ul>
         {% block searchbar %}
         <ul class="navbar-nav ms-automb-2 mb-lg-0 w-25 d-flex justify-content-end">
-          <form class="d-flex input-group w-75" action="{{url_for('public.keywords_recomendation')}}" method="POST">
+          <form class="d-flex input-group w-75" action="{{url_for('public.recomendation')}}" method="POST" id="search_form">
             <input
+              id="search_bar"
               type="search"
               class="form-control bg-transparent "
               placeholder="Search tags,actors..."
               aria-label="Search"
-              name="keywords"
+              name="movie_name"
+              autocomplete="off"
             />
+            <div class="position-absolute invisible bg-black" style="color:black;top:3vh;font-weight: bold;" id="form_complete1"></div>
+            <span class="input-group-text border-0" id="search-addon">
+              <i class="fas fa-search position-relative" style="font-size: 1.5em;" onclick="$('#search_form').submit()"></i>
+            </span>
         </form>
         </ul>
         {% endblock %}

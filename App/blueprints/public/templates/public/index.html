@@ -1,5 +1,13 @@
 {% extends 'base.html'%}
   {% block style%}
+  <script>
+    $(document).ready( function() {
+    $.get("/titles",function(data) {
+        const title_list = data;
+        set_autocomplete('movies', 'form_complete', title_list, start_at_letters=2, count_results=5);
+    });
+  });
+  </script>
   <style>
     #intro {
       background-image: url("https://img.freepik.com/free-vector/red-movie-theater-seats-with-curtains-background_1017-38388.jpg?semt=ais_hybrid");
@@ -34,11 +42,13 @@
           <h1 class="mb-3">Cinema Wins</h1>
           <h5 class="mb-3">Finds perfect movie for you</h5> 
           <h5 class="mb-4">
-            <form style="width: 30vw; min-width: 300px;" action="{{url_for('public.recomendation')}}" method="POST" class="data-mdb-input-init">
+            <form style="width: 30vw; min-width: 300px;" action="{{url_for('public.recomendation')}}" method="POST" class="data-mdb-input-init" id="movie_form">
               <div class="input-group rounded">
-                <input type="search" class="form-control rounded bg-transparent" placeholder="Enter movie title" aria-label="Search" aria-describedby="search-addon" name="movie_name"/>
+                <input type="search" class="form-control rounded bg-transparent" placeholder="Enter movie title" aria-label="Search" aria-describedby="search-addon" id="movies" name="movie_name" autocomplete="off"/>
+                <div class="position-absolute invisible bg-black" style="color:black;top:3vh;font-weight: bold;" id="form_complete"></div>
+                 <!--<button class="btn btn-primary-outline"><i class="fas fa-search position-relative" style="font-size: 2em;top:-5px;"></i></button> --> 
                 <span class="input-group-text border-0" id="search-addon">
-                  <i class="fas fa-search"></i>
+                  <i class="fas fa-search position-relative" style="font-size: 1.5em;" onclick="$('#movie_form').submit()"></i>
                 </span>
               </div>
             </form>
