@@ -45,6 +45,10 @@ class User(UserMixin,db.Model):
     def __repr__(self) -> str:
        return '<User {}>'.format(self.Username)
    
+    def watchlist_query(self):
+        subquery = db.session.query(watchlist.c.Movie_ID).filter(watchlist.c.User_ID == self.id)
+        return db.session.query(Movie).filter(Movie.index.in_(subquery))
+   
     def avatar(self, size):
         digest = md5(self.Email.lower().encode('utf-8')).hexdigest()
         return f'https://www.gravatar.com/avatar/{digest}?d=identicon&s={size}'

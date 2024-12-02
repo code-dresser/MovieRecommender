@@ -1,6 +1,6 @@
 <div class="container w-100">
     <div class="row">
-        {% for movie in user.watchlist|reverse %}
+        {% for movie in watchlist %}
         <div class="col-md-4 mt-3 col-lg-3" >
             <div class="bg-image hover-overlay " >
             {% if movie.poster_path != "" %} 
@@ -16,3 +16,24 @@
         {% endfor %}
     </div>
 </div>
+
+<nav aria-label="Page navigation" class="mt-3">
+    <ul class="pagination">
+    {% if w_prev != None %}
+      <li class="page-item">
+        <a class="page-link" href="{{w_prev}}" aria-label="Previous">
+          <span aria-hidden="true">&laquo;</span>
+        </a>
+      </li>
+      {% endif %}
+      <li class="page-item"><a class="page-link" href="#">{{request.args.get('wpage') or 1}}</a></li>
+      {% if w_next != None %}
+      <li class="page-item">
+        <a class="page-link" href="{{w_next}}" aria-label="Next">
+          <span aria-hidden="true">&raquo;</span>
+        </a>
+      </li>
+      {% endif %}
+    </ul>
+  </nav>
+ 

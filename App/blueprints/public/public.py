@@ -1,6 +1,6 @@
 from flask import Blueprint,redirect,render_template,url_for,request,jsonify,flash
 from flask_login import login_required,current_user
-from ...Models import Movie,Review,User
+from ...Models import Movie,Review,User,watchlist
 from  ... import Recomender
 from ...extentions import db
 from .forms import ReviewForm
@@ -43,13 +43,29 @@ def recomendation():
 @public.route("/user/<username>",methods=['GET'])    
 def user(username):
     user = User.query.filter(User.Username == username).first_or_404()
-    return render_template("user_page.html",user=user)
+    review_page = request.args.get('page',1,type=int)
+    watchlist_page = request.args.get('wlist',1,type=int)
+    reviews_query = db.session.query(Review).filter(Review.User_ID == user.id)
+    reviews = db.paginate(reviews_query,page=review_page,per_page=5,error_out=False)
+    watchlist = db.paginate(user.watchlist_query(),page=watchlist_page,per_page=20,error_out=False)
+    next_url = url_for('public.user',username=user.Username,page=reviews.next_num) if reviews.has_next else None
+    prev_url = url_for('public.user',username=user.Username,page=reviews.prev_num) if reviews.has_prev else None
+    wnext_url = url_for('public.user',username=user.Username,wpage=watchlist.next_num) if watchlist.has_next else None
+    wprev_url = url_for('public.user',username=user.Username,wpage=watchlist.prev_num) if watchlist.has_prev else None
 
-@public.route("/profile",methods=['GET'])
+
+    return render_template("user_page.html",user=user,reviews=reviews,next=next_url,prev=prev_url,watchlist=watchlist,w_next=wnext_url,w_prev=wprev_url)
+
+@public.route("/profile/",methods=['GET'])
 @login_required
 def profile():
+    review_page = request.args.get('page',1,type=int)
+    reviews_query = db.session.query(Review).filter(Review.User_ID == current_user.id)
+    reviews = db.paginate(reviews_query,page=review_page,per_page=5,error_out=False)
+    next_url = url_for('public.profile',page=reviews.next_num) if reviews.has_next else None
+    prev_url = url_for('public.profile', page=reviews.prev_num) if reviews.has_prev else None
     form = ReviewForm()
-    return render_template("profile.html",form=form)
+    return render_template("profile.html",form=form,reviews=reviews,next=next_url,prev=prev_url)
 
 @public.route("/profile/add/<id>",methods=['GET'])
 @login_required
@@ -58,7 +74,7 @@ def watchlist_add(id):
     if movie not in current_user.watchlist:
         current_user.watchlist.append(movie)
     db.session.commit()
-    return redirect(url_for("public.profile"))
+    return ""
 
 @public.route("/profile/add/movie",methods=['POST'])
 @login_required
