@@ -1,0 +1,59 @@
+<div
+  class="modal fade"
+  id="edit_user"
+  data-mdb-backdrop="static"
+  data-mdb-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="staticBackdropLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered modal-lg modal-fullscreen-sm-down">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Edytuj your information</h5>
+        <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <!-- 2 column grid layout with text inputs for the first and last names -->
+          <div class="row mb-4">
+            <div class="col">
+              <div data-mdb-input-init class="form-outline">
+                <input type="text" id="form6Example1" class="form-control" value="{{current_user.first_name}}" />
+                <label class="form-label" for="form6Example1">First name</label>
+              </div>
+            </div>
+            <div class="col">
+              <div data-mdb-input-init class="form-outline">
+                <input type="text" id="form6Example2" class="form-control" value="{{current_user.last_name}}" />
+                <label class="form-label" for="form6Example2">Last name</label>
+              </div>
+            </div>
+          </div>
+        
+
+        
+          <!-- Email input -->
+          <div data-mdb-input-init class="form-outline mb-4">
+            <input type="email" id="form6Example5" class="form-control" value="{{current_user.Email}}" />
+            <label class="form-label" for="form6Example5">Email</label>
+          </div>
+        
+
+        
+          <!-- Bio input -->
+          <div data-mdb-input-init class="form-outline mb-4">
+            <textarea class="form-control" id="form6Example7" rows="4" value="{{current_user.Bio}}"></textarea>
+            <label class="form-label" for="form6Example7">Bio</label>
+          </div>
+        
+
+        
+          <!-- Submit button -->
+          <button data-mdb-ripple-init type="button" class="btn btn-primary btn-block mb-4">Edit</button>
+        </form>
+      </div>
+      
+    </div>
+  </div>
+</div>

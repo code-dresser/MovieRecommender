@@ -21,7 +21,6 @@ def login_page():
         else:
             login_user(user,remember=remember_me)
             print(email,password,remember_me)
-            flash("Welcome back {}".format(user.Username))
             return redirect(url_for("public.profile"))
     else:
         for error in login_form.errors.items():

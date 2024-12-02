@@ -34,8 +34,12 @@
           {%endif%}
       <!-- Jumbotron -->
     </section>
-    <!--Section: Content-->
-
+    <!--Section: Testimonials-->
+    <section>
+      {%if search and reviews|length > 0 %}
+        {% include "_testimonials.html" %}
+      {% endif %}
+    </section>
     <!--Section: Content-->
     <section class="text-center">
       <h4 class="mb-5 text-secondary"><strong>These may interest you:</strong></h4>

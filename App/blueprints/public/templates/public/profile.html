@@ -37,7 +37,16 @@ function review_del(movie_id) {
 
 </script>
 <style>
+.gradient-custom {
+/* fallback for old browsers */
+background: #f6d365;
 
+/* Chrome 10-25, Safari 5.1-6 */
+background: -webkit-linear-gradient(to right bottom, rgba(246, 211, 101, 1), rgba(253, 160, 133, 1));
+
+/* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+background: linear-gradient(to right bottom, rgba(121,24,9,1), rgba(0,5,6,1))
+}
 #image{
   background: linear-gradient(20deg, rgba(2,0,36,1) 25%, rgba(121,24,9,1) 57%, rgba(0,5,6,1) 100%)
 }
@@ -72,76 +81,22 @@ function review_del(movie_id) {
 
 <div class="container-fluid bg-image" id="image">
 <div class="bg-black text-white container-md my-5 py-5 rounded-3">
- <h3> Welcome {{current_user.Username}}</h3>
+ <div>
+  {% include '_profile_user_card.html' %}
+ </div>
 
-
-<!-- Modal -->
-<div
-  class="modal fade"
-  id="staticBackdrop"
-  data-mdb-backdrop="static"
-  data-mdb-keyboard="false"
-  tabindex="-1"
-  aria-labelledby="staticBackdropLabel"
-  aria-hidden="true"
->
-  <div class="modal-dialog modal-dialog-centered  modal-lg modal-fullscreen-sm-down">
-    <div class="modal-content bg-dark text-white">
-      <div class="modal-header">
-        <h5 class="modal-title" id="staticBackdropLabel">Dodaj Recenzję</h5>
-        <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <form action="{{url_for('public.add_review')}}" method="post" enctype="multipart/form-data">
-      <div class="modal-body">
-          <!-- Name input -->
-          {{ form.csrf_token }}
-           {{form.movie_ID()}}
-          <div data-mdb-input-init class="form-outline mb-4">
-            {{form.title(class_="form-control")}}
-            <!-- <input type="text" id="form4Example1" class="form-control" /> -->
-            <label class="form-label" for="title">Tytuł</label>
-          </div>
-
-          <!-- Email input -->
-          <div data-mdb-input-init class="form-outline mb-4">
-            <div class="container">
-              <div>Ocena </div>
-              <div class="starrating risingstar d-flex justify-content-center flex-row-reverse">
-                {% for subfield in form.rating|reverse%}
-                  {{subfield}}{{subfield.label}}
-                {% endfor %}
-             </div>
-            </div>
-          </div>
-
-          <!-- Message input -->
-          <div data-mdb-input-init class="form-outline mb-4">
-            <!-- <textarea class="form-control" id="form4Example3" rows="4"></textarea> -->
-             {{form.review_text(class_="form-control",rows="4")}}
-            <label class="form-label" for="form4Example3">Treść recenzji</label>
-          </div>
-
-
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-mdb-ripple-init data-mdb-dismiss="modal">Close</button>
-        {{form.submit(class_="btn btn-primary",value="Zapisz")}}
-        <!-- <input  type="submit" class="btn btn-primary"  value="Zapisz" data-mdb-ripple-init /> -->
-      </div>
-    </form>
-    </div>
-  </div>
-</div>
-
-<div class="container-fluid  text-secondary my-5 d-flex flex-column">
-  <h2 class="text-white">Your reviews</h2>
+<!-- Modals -->
+{% include '_review_modal.html' %}
+{% include '_edit_user.html' %}
+<div class="container-fluid  text-secondary my-5 d-flex flex-column bg-black">
+  <h2 class="text-white">Your reviews </h2>
   <div id="reviews" class="">
-      {% include '_reviews.html'%}
+      {% include '_profile_reviews.html'%}
   </div>
 </div>
 <hr class="hr" style="color:silver">
 <div class="container-fluid  text-secondary my-3 d-flex flex-column">
-  <h2 class="text-white d-inline">Your movies</h2>
+  <h2 class="text-white d-inline">Your movies </h2>
   <form class="form-inline  w-100" id="myForm">
          <div class="row align-self-center">
            <div class="col-lg-4 col-md-6 col-sm-8 ">
@@ -156,7 +111,7 @@ function review_del(movie_id) {
   <div class="d-flex flex-row">
   <div class="col-md-1 col-lg-2 d-xs-none"></div>
   <div id="watchlist" class="align-self-center col-md-10 col-lg-8 col-xs-12 ">
-    {% include '_watchlist.html'%}
+    {% include '_profile_watchlist.html'%}
   </div>
   <div class="col-md-1 col-lg-2 d-xs-none"></div>
 </div>

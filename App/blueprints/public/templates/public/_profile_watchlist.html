@@ -1,0 +1,34 @@
+{% with messages = get_flashed_messages() %}
+{% if messages %}
+<div class="alert alert-warning alert-dismissible fade show" role="alert">
+<ul>
+    {% for message in messages %}
+    <li style="font-size: 12pt;">{{ message }}</li>
+    {% endfor %}
+</ul>
+<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{%endif%}
+{%endwith%}
+<div class="container w-100">
+    <div class="row">
+        {% for movie in current_user.watchlist|reverse %}
+        <div class="col-md-4 mt-3 col-lg-3" >
+            <div class="bg-image hover-overlay " >
+            {% if movie.poster_path != "" %} 
+                <img src="https://image.tmdb.org/t/p/original/{{movie.poster_path}}" class="img-thumbnail w-100 h-auto" alt="{{movie.title}}" >
+                
+            {% else %} 
+                <img src="{{url_for('static',filename='default-movie.png')}}" alt="Missing poster">
+            {% endif %}
+                <div class="mask" style="background: linear-gradient(20deg, rgba(2,0,36,0.7931547619047619) 25%, rgba(121,24,9,0.7483368347338936) 57%, rgba(0,5,6,0.5018382352941176) 100%);">
+                    <div class=" d-flex flex-column  align-items-end  h-100">
+                            <i class="far fa-trash-can p-3" style="font-size: 2em;color: white;"  onclick="watchlist_del('{{movie.id}}')"></i>
+                            <button class="btn btn-primary mt-auto mx-auto mb-6 " onclick="$('#movie_id').val('{{movie.id}}')" data-mdb-ripple-init data-mdb-modal-init data-mdb-target="#write_review"> Write review</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>

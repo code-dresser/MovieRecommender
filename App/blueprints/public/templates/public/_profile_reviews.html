@@ -1,5 +1,5 @@
 <div class="accordion  " id="accordionExample">
-    {% for review in user.reviews%}
+    {% for review in current_user.reviews%}
         <div class="accordion-item bg-dark my-3">
             <h2 class="accordion-header" id="heading{{review.Review_ID}}">
                 <button
@@ -28,6 +28,10 @@
                     <div class="mb-4">
                         <h5>{{review.title}}</h5>
                         <p>{{review.review_text}}</p>
+                    </div>
+                    <div>
+                        <button class="btn btn-secondary">Edit review</button>
+                        <button onclick="review_del('{{review.Review_ID}}')" class="btn btn-primary">Delete review</button>
                     </div>
                 </div>
             </div>

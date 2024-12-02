@@ -1,0 +1,72 @@
+<div class="container my-5 py-5">
+    <div class="row d-flex justify-content-center">
+      <div class="col-md-12">
+        <div class="text-center mb-4 pb-2">
+          <i class="fas fa-quote-left fa-3x text-white"></i>
+        </div>
+
+        <div class="card bg-black text-white border border-white">
+          <div class="card-body px-4 py-5">
+            <!-- Carousel wrapper -->
+            <div id="carouselDarkVariant" data-mdb-carousel-init class="carousel slide carousel-light" data-mdb-ride="carousel">
+              <!-- Indicators -->
+              <div class="carousel-indicators mb-0">
+                <button data-mdb-button-init data-mdb-target="#carouselDarkVariant" data-mdb-slide-to="0" class="active"
+                  aria-current="true" aria-label="Slide 1"></button>
+                  {%for i in range(reviews|length - 1) %}
+                    <button data-mdb-button-init data-mdb-target="#carouselDarkVariant" data-mdb-slide-to="{{i}}"
+                    aria-label="Slide {{i}}"></button>
+                  {% endfor %}
+              </div>
+
+              <!-- Inner -->
+              <div class="carousel-inner  pb-5">
+                {% for i in range(reviews|length)%}
+                <!-- Single item -->
+                <div class="carousel-item {%if i == 0%}active {% endif %}">
+                  <div class="row d-flex justify-content-center">
+                    <div class="col-lg-10 col-xl-8">
+                      <div class="row">
+                        <div class="col-lg-4 d-flex justify-content-center">
+                            <a href="{{url_for('public.user',username=reviews[i].author.Username)}}">
+                          <img src="{{reviews[i].author.avatar(100)}}"
+                            class="rounded-circle shadow-1 mb-4 mb-lg-0" alt="woman avatar" width="150"
+                            height="150" />
+                        </a>
+                        </div>
+                        <div
+                          class="col-9 col-md-9 col-lg-7 col-xl-8 text-center text-lg-start mx-auto mx-lg-0">
+                          <h4 class="mb-4">{{reviews[i].author.Username}} - {{reviews[i].title}}</h4>
+                          <p class="mb-4 pb-5">
+                                {{reviews[i].review_text}}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {% endfor %}
+              <!-- Inner -->
+
+              <!-- Controls -->
+              <button data-mdb-button-init class="carousel-control-prev" type="button" data-mdb-target="#carouselDarkVariant"
+                data-mdb-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+              </button>
+              <button data-mdb-button-init class="carousel-control-next" type="button" data-mdb-target="#carouselDarkVariant"
+                data-mdb-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+              </button>
+            </div>
+            <!-- Carousel wrapper -->
+          </div>
+        </div>
+        </div>
+        <div class="text-center mt-5 pt-2">
+          <i class="fas fa-quote-right fa-3x text-white"></i>
+        </div>
+      </div>
+    </div>
+  </div>

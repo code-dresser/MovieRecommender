@@ -3,9 +3,7 @@ import pandas as pd
 import difflib
 from sklearn.feature_extraction.text import TfidfVectorizer,CountVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
-from tmdbv3api import TMDb, Movie
-from dotenv import load_dotenv
-import os
+
 
 class MovieRecomender:
 
@@ -16,12 +14,34 @@ class MovieRecomender:
         self.similarity_matrix = []
         self.features = ''
         self.title_list = self.movie_data['title'].tolist()
-        self.tmdb = TMDb()
-        load_dotenv()
-        self.tmdb.api_key = os.getenv("TMDB_API_KEY") 
+        #mean vote across the whole report
+        self.C = self.movie_data['vote_average'].mean()
+        # Minimum votes required to be listed in the chart
+        # I'm using 90 percentile as my cutoff
+        # i.e. for the movie to be listed it must have more votes than at least 90% of the movies in the list
+        self.m = self.movie_data['vote_count'].quantile(0.9)
+        self.score_movies()
         pass
     
-
+    
+    def score_movies(self):
+        if "score" in self.movie_data.columns:
+            pass
+        else:
+            self.movie_data["score"] = self.movie_data.apply(self.weighted_ratings,axis=1)
+            pass
+        
+    def weighted_ratings(self,x):
+        v = x['vote_count']  # No. of voted for the movie
+        R = x['vote_average']  # Average rating for the movie
+        # Calculation based on teh IMDB formula
+        return ((v/v+self.m) * R + (self.m/self.m+v) * self.C)
+    # Weighed Rating (WR) = ((v/v+m) * R + (m/m+v) * C)
+    # v = number of votes for the movie;
+    # m = minimum votes required to be listed in the chart;
+    # R = average rating of the movie; And
+    # C = mean vote across the whole report
+        
     def get_popular_movies(self) :
         movie_indices = self.movie_data.sort_values("score",ascending=False).head(9)
         return movie_indices['id'].values.tolist()

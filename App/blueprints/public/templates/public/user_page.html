@@ -1,0 +1,49 @@
+{% extends 'base.html'%}
+{% block style %}
+<style>
+.gradient-custom {
+/* fallback for old browsers */
+background: #f6d365;
+
+/* Chrome 10-25, Safari 5.1-6 */
+background: -webkit-linear-gradient(to right bottom, rgba(246, 211, 101, 1), rgba(253, 160, 133, 1));
+
+/* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+background: linear-gradient(to right bottom, rgba(121,24,9,1), rgba(0,5,6,1))
+}
+#image{
+  background: linear-gradient(20deg, rgba(2,0,36,1) 25%, rgba(121,24,9,1) 57%, rgba(0,5,6,1) 100%)
+}
+</style>
+{% endblock %}
+</head>
+
+{% block content %}
+
+
+<div class="container-fluid bg-image" id="image">
+<div class="bg-black text-white container-md my-5 py-5 rounded-3">
+ <div>
+  {% include '_user_card.html' %}
+ </div>
+
+<div class="container-fluid  text-secondary my-5 d-flex flex-column bg-black">
+  <h2 class="text-white"> {{user.Username}}'s reviews </h2>
+  <div id="reviews" class="">
+      {% include '_reviews.html'%}
+  </div>
+</div>
+<hr class="hr" style="color:silver">
+<div class="container-fluid  text-secondary my-3 d-flex flex-column">
+  <h2 class="text-white d-inline"> {{user.Username}}'s movies </h2>
+  <div class="d-flex flex-row">
+  <div class="col-md-1 col-lg-2 d-xs-none"></div>
+  <div id="watchlist" class="align-self-center col-md-10 col-lg-8 col-xs-12 ">
+    {% include '_watchlist.html'%}
+  </div>
+  <div class="col-md-1 col-lg-2 d-xs-none"></div>
+</div>
+
+</div>
+</div>
+{% endblock %}

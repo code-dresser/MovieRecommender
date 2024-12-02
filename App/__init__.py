@@ -1,8 +1,10 @@
 import flask
+from flask_login import current_user
 from .blueprints.public.public import public
 from .blueprints.auth.auth import auth
 from dotenv import load_dotenv
 from .extentions import db,bcrypt,login_manager
+from datetime import datetime, timezone
 import os
 
 def create_app():
@@ -19,10 +21,21 @@ def create_app():
     bcrypt.init_app(app)
     
     from .Models import User
-    
+    #user loading function
     @login_manager.user_loader
     def load_user(User_ID):
         return User.query.get(int(User_ID))
+    # 404 handling
+    @app.errorhandler(404)
+    def not_found(e):
+        return flask.render_template('404page.html'), 404
+    
+    # update value of user last_seen  
+    @app.before_request
+    def before_request():
+        if current_user.is_authenticated:
+            current_user.last_seen = datetime.now(timezone.utc)
+            db.session.commit()
     # Set up the main route
     app.register_blueprint(public)
     app.register_blueprint(auth)

@@ -1,0 +1,56 @@
+<div
+  class="modal fade"
+  id="write_review"
+  data-mdb-backdrop="static"
+  data-mdb-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="staticBackdropLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered  modal-lg modal-fullscreen-sm-down">
+    <div class="modal-content bg-dark text-white">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Dodaj Recenzję</h5>
+        <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form action="{{url_for('public.add_review')}}" method="post" enctype="multipart/form-data">
+      <div class="modal-body">
+          <!-- Name input -->
+          {{ form.csrf_token }}
+           {{form.movie_ID()}}
+          <div data-mdb-input-init class="form-outline mb-4">
+            {{form.title(class_="form-control")}}
+            <!-- <input type="text" id="form4Example1" class="form-control" /> -->
+            <label class="form-label" for="title">Tytuł</label>
+          </div>
+
+          <!-- Email input -->
+          <div data-mdb-input-init class="form-outline mb-4">
+            <div class="container">
+              <div>Ocena </div>
+              <div class="starrating risingstar d-flex justify-content-center flex-row-reverse">
+                {% for subfield in form.rating|reverse%}
+                  {{subfield}}{{subfield.label}}
+                {% endfor %}
+             </div>
+            </div>
+          </div>
+
+          <!-- Message input -->
+          <div data-mdb-input-init class="form-outline mb-4">
+            <!-- <textarea class="form-control" id="form4Example3" rows="4"></textarea> -->
+             {{form.review_text(class_="form-control",rows="4")}}
+            <label class="form-label" for="review_text">Treść recenzji</label>
+          </div>
+
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-mdb-ripple-init data-mdb-dismiss="modal">Close</button>
+        {{form.submit(class_="btn btn-primary",value="Zapisz")}}
+        <!-- <input  type="submit" class="btn btn-primary"  value="Zapisz" data-mdb-ripple-init /> -->
+      </div>
+    </form>
+    </div>
+  </div>
+</div>
