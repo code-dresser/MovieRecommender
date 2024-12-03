@@ -8,11 +8,12 @@
               <img src="{{current_user.avatar(100)}}" alt="Avatar" class="img-fluid my-5 rounded-circle" />
               <h5>{{current_user.first_name}} {{current_user.last_name}}</h5>
               <p>Movie connoisseur</p>
-              <i class="far fa-edit mb-5"  data-mdb-modal-init data-mdb-target="#edit_user"></i>
+              <i class="far fa-edit mb-3"  data-mdb-modal-init data-mdb-target="#edit_user"></i><br>
+              <a href="{{url_for('public.user',username=current_user.Username)}}" class="btn btn-info mb-3">Mobile view</a>
             </div>
             <div class="col-md-8">
               <div class="card-body p-4">
-                <h6>Information</h6> <a class="align-self-end" href="{{url_for('public.user',username=current_user.Username)}}">Your movies pagination</a>
+                 <h6>Information</h6>
                 <hr class="mt-0 mb-4">
                 <div class="row pt-1">
                   <div class="col-6 mb-3">
@@ -36,7 +37,6 @@
                 <hr class="mt-0 mb-4">
                 <div class="row pt-1">
                   <div class="col-12 mb-3">
-                    <h6>Bio</h6>
                     <p class="text-muted">{{current_user.Bio}}</p>
                   </div>
 

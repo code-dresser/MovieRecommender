@@ -21,7 +21,7 @@ class Review(db.Model):
     Movie_ID = db.Column("Movie_ID",db.Integer,db.ForeignKey('Movies.index'))
     title:so.Mapped[str] = so.mapped_column(String(150))
     rating: so.Mapped[float] = so.mapped_column(nullable=False)
-    review_text:so.Mapped[str] = so.mapped_column(String(250))
+    review_text:so.Mapped[str] = so.mapped_column(String(400))
     def __repr__(self) -> str:
        return '<Review {} {}>'.format(self.Review_ID,self.review_text)    
    
@@ -33,7 +33,7 @@ class User(UserMixin,db.Model):
     Email :so.Mapped[str] = so.mapped_column(String(100),nullable=False)
     Password:so.Mapped[Optional[str]] = so.mapped_column(String(120),nullable=False)
     Password_hash:so.Mapped[Optional[str]] = so.mapped_column(String(120),nullable=False)
-    Bio:so.Mapped[Optional[str]]= so.mapped_column(String(250),nullable=True)
+    Bio:so.Mapped[Optional[str]]= so.mapped_column(String(500),nullable=True)
     first_name:so.Mapped[Optional[str]]= so.mapped_column(String(150),nullable=True,default="Mystery")
     last_name:so.Mapped[Optional[str]]= so.mapped_column(String(150),nullable=True,default="Person")
     created_at:so.Mapped[datetime] = db.Column(db.DateTime,default=datetime.now(timezone.utc))

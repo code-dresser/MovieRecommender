@@ -14,30 +14,30 @@
                 <button data-mdb-button-init data-mdb-target="#carouselDarkVariant" data-mdb-slide-to="0" class="active"
                   aria-current="true" aria-label="Slide 1"></button>
                   {%for i in range(reviews|length - 1) %}
-                    <button data-mdb-button-init data-mdb-target="#carouselDarkVariant" data-mdb-slide-to="{{i}}"
-                    aria-label="Slide {{i}}"></button>
+                    <button data-mdb-button-init data-mdb-target="#carouselDarkVariant" data-mdb-slide-to="{{i+1}}"
+                    aria-label="Slide 1"></button>
                   {% endfor %}
               </div>
 
               <!-- Inner -->
-              <div class="carousel-inner  pb-5">
+              <div class="carousel-inner pb-5">
                 {% for i in range(reviews|length)%}
                 <!-- Single item -->
-                <div class="carousel-item {%if i == 0%}active {% endif %}">
-                  <div class="row d-flex justify-content-center">
+                <div class="carousel-item  {%if i == 0%}active {% endif %} ">
+                  <div class="row d-flex justify-content-center ">
                     <div class="col-lg-10 col-xl-8">
                       <div class="row">
                         <div class="col-lg-4 d-flex justify-content-center">
                             <a href="{{url_for('public.user',username=reviews[i].author.Username)}}">
                           <img src="{{reviews[i].author.avatar(100)}}"
-                            class="rounded-circle shadow-1 mb-4 mb-lg-0" alt="woman avatar" width="150"
+                            class="rounded-circle shadow-1 mb-4 mb-lg-0" alt=" avatar" width="150"
                             height="150" />
                         </a>
                         </div>
                         <div
                           class="col-9 col-md-9 col-lg-7 col-xl-8 text-center text-lg-start mx-auto mx-lg-0">
                           <h4 class="mb-4">{{reviews[i].author.Username}} - {{reviews[i].title}}</h4>
-                          <p class="mb-4 pb-5">
+                          <p class="mb-4 pb-5" style="height: 100%;">
                                 {{reviews[i].review_text}}
                           </p>
                         </div>

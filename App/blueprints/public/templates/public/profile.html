@@ -88,15 +88,15 @@ background: linear-gradient(to right bottom, rgba(121,24,9,1), rgba(0,5,6,1))
 <!-- Modals -->
 {% include '_review_modal.html' %}
 {% include '_edit_user.html' %}
-<div class="container-fluid  text-secondary my-5 d-flex flex-column bg-black">
-  <h2 class="text-white">Your reviews </h2>
+<div class="container-fluid  text-secondary my-5 d-flex flex-column bg-black d-none d-md-block">
+  <h2 class="text-white">Yours reviews </h2>
   <div id="reviews" class="">
       {% include '_profile_reviews.html'%}
   </div>
 </div>
 <hr class="hr" style="color:silver">
 <div class="container-fluid  text-secondary my-3 d-flex flex-column">
-  <h2 class="text-white d-inline">Your movies </h2>
+  <h2 class="text-white d-inline">Yours movies </h2>
   <form class="form-inline  w-100" id="myForm">
          <div class="row align-self-center">
            <div class="col-lg-4 col-md-6 col-sm-8 ">

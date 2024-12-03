@@ -20,22 +20,27 @@ background: linear-gradient(to right bottom, rgba(121,24,9,1), rgba(0,5,6,1))
 
 {% block content %}
 
-
 <div class="container-fluid bg-image" id="image">
 <div class="bg-black text-white container-md my-5 py-5 rounded-3">
+  {% if current_user.id == user.id%}
+    <div class="note note-info mb-3">
+      <strong>Note :</strong> In mobile view some elements are simplified, as such you cannot edit,delete or add new movies and reviews.<br>
+        Please login using desktop device to comfortably access all of yours profile features.
+    </div>
+{% endif %}
  <div>
   {% include '_user_card.html' %}
  </div>
 
-<div class="container-fluid  text-secondary my-5 d-flex flex-column bg-black">
-  <h2 class="text-white"> {{user.Username}}'s reviews </h2>
+<div class="container-fluid  text-secondary my-5 d-flex flex-column bg-black d-none d-md-block">
+  <h2 class="text-white"> {% if current_user.id == user.id%} Yours {% else %} {{user.Username}}'s {% endif %} reviews </h2>
   <div id="reviews" class="">
       {% include '_reviews.html'%}
   </div>
 </div>
 <hr class="hr" style="color:silver">
 <div class="container-fluid  text-secondary my-3 d-flex flex-column">
-  <h2 class="text-white d-inline"> {{user.Username}}'s movies </h2>
+  <h2 class="text-white d-inline">{% if current_user.id == user.id%} Yours {% else %} {{user.Username}}'s {% endif %} movies </h2>
   <div class="d-flex flex-row">
   <div class="col-md-1 col-lg-2 d-xs-none"></div>
   <div id="watchlist" class="align-self-center col-md-10 col-lg-8 col-xs-12 ">

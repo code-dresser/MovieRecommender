@@ -10,23 +10,26 @@
   <div class="modal-dialog modal-dialog-centered modal-lg modal-fullscreen-sm-down">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="staticBackdropLabel">Edytuj your information</h5>
+        <h5 class="modal-title" id="staticBackdropLabel">Edit your information</h5>
         <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form>
+        <form action="{{url_for('public.edit_profile')}}" method="POST" enctype="multipart/form-data" novalidate>
+          {{ u_form.csrf_token }}
           <!-- 2 column grid layout with text inputs for the first and last names -->
           <div class="row mb-4">
             <div class="col">
               <div data-mdb-input-init class="form-outline">
-                <input type="text" id="form6Example1" class="form-control" value="{{current_user.first_name}}" />
-                <label class="form-label" for="form6Example1">First name</label>
+                {{u_form.first_name(class_="form-control",value=current_user.first_name)}}
+                <!-- <input type="text" id="form6Example1" class="form-control" value="{{current_user.first_name}}" /> -->
+                <label class="form-label" for="first_name">First name</label>
               </div>
             </div>
             <div class="col">
               <div data-mdb-input-init class="form-outline">
-                <input type="text" id="form6Example2" class="form-control" value="{{current_user.last_name}}" />
-                <label class="form-label" for="form6Example2">Last name</label>
+                {{u_form.last_name(class_="form-control",value=current_user.last_name)}}
+                <!-- <input type="text" id="form6Example2" class="form-control" value="{{current_user.last_name}}" /> -->
+                <label class="form-label" for="last_name">Last name</label>
               </div>
             </div>
           </div>
@@ -35,22 +38,25 @@
         
           <!-- Email input -->
           <div data-mdb-input-init class="form-outline mb-4">
-            <input type="email" id="form6Example5" class="form-control" value="{{current_user.Email}}" />
-            <label class="form-label" for="form6Example5">Email</label>
+            {{u_form.email(class_="form-control",value=current_user.Email)}}
+            <!-- <input type="email" id="form6Example5" class="form-control" value="{{current_user.Email}}" /> -->
+            <label class="form-label" for="email">Email</label>
           </div>
         
 
         
           <!-- Bio input -->
           <div data-mdb-input-init class="form-outline mb-4">
-            <textarea class="form-control" id="form6Example7" rows="4" value="{{current_user.Bio}}"></textarea>
-            <label class="form-label" for="form6Example7">Bio</label>
+            {{u_form.Bio(class_="form-control",value=current_user.Bio,rows="4")}}
+            <!-- <textarea class="form-control" id="form6Example7" rows="4" value="{{current_user.Bio}}"></textarea> -->
+            <label class="form-label" for="Bio">Bio</label>
           </div>
         
 
         
           <!-- Submit button -->
-          <button data-mdb-ripple-init type="button" class="btn btn-primary btn-block mb-4">Edit</button>
+           {{u_form.submit(class_='btn btn-primary btn-block mb-4',value="Edit")}}
+          <!-- <button data-mdb-ripple-init type="button" class="btn btn-primary btn-block mb-4">Edit</button> -->
         </form>
       </div>
       

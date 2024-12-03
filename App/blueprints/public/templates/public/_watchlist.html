@@ -26,7 +26,7 @@
         </a>
       </li>
       {% endif %}
-      <li class="page-item"><a class="page-link" href="#">{{request.args.get('wpage') or 1}}</a></li>
+      <li class="page-item"><a class="page-link" href="#">{{request.args.get('wlist') or 1}}</a></li>
       {% if w_next != None %}
       <li class="page-item">
         <a class="page-link" href="{{w_next}}" aria-label="Next">
