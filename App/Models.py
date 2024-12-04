@@ -66,7 +66,7 @@ class Movie(db.Model):
     title: so.Mapped[str] = so.mapped_column(String(120),nullable=False)
     vote_average: so.Mapped[float] = so.mapped_column(nullable=True)
     vote_count: so.Mapped[float] = so.mapped_column(nullable=True)
-    release_date: so.Mapped[str] = so.mapped_column(String(50),nullable=True)
+    #release_date: so.Mapped[str] = so.mapped_column(String(50),nullable=True)
     overview: so.Mapped[str] = so.mapped_column(nullable=True)
     tagline: so.Mapped[str] = so.mapped_column(String(120),nullable=True)
     genres: so.Mapped[str] = so.mapped_column(String(120),nullable=True)

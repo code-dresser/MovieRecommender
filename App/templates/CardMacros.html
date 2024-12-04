@@ -45,43 +45,60 @@
 
 {%endmacro%}
 
-{% macro small_card(movie)%}
+{% macro small_card(movie,current_user)%}
+{%set default_src = url_for('static',filename='default-movie.png') %}
 <div class="col-lg-4 col-md-6 mb-4">
     <div class="card border  border-3 border-danger shadow-4-strong h-100">
       <div class="bg-image hover-overlay ripple" data-mdb-ripple-init data-mdb-ripple-color="light">
-        <img src="{{movie[5]}}" class="img-fluid" />
+        <img src="https://image.tmdb.org/t/p/original{{movie.poster_path}}" alt="Not Found" onerror="this.src='{{default_src}}';this.onerror=null" class="img-fluid" />
         <a href="#!">
           <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
         </a>
       </div>
       <div class="card-body">
-        <h5 class="card-title">{{movie[0]|title}}</h5><h6>{{movie[1]}}★</h6><hr class="hr"/>
+        <h5 class="card-title">{{movie.title|title}}</h5><h6>{{"%.2f"|format(movie.vote_average)}}★</h6><hr class="hr"/>
         <p class="card-text">
-          <p>{{movie[2]}}</p>
-          {{movie[3][:200]}}...
+          <p>{{movie.genres}}</p>
+          {{movie.overview[:200]}}...
         </p>
-        <a href="https://www.themoviedb.org/movie/{{movie[4]}}" target="_blank" class="btn btn-danger" data-mdb-ripple-init>Read more</a>
+        <a href="https://www.themoviedb.org/movie/{{movie.id}}" target="_blank" class="btn btn-danger me-2" data-mdb-ripple-init>Read more</a>
+        {% if current_user.is_authenticated %}
+            {% if movie in current_user.watchlist %}
+              <button class="btn btn-danger btn-floating"><i class='fas fa-heart' style="font-size: 2em;"></i></button>
+            {% else %}
+              <button class="btn btn-danger btn-floating" onclick="watchlist_add(this,'{{movie.id}}')"><i class="far fa-heart " style="font-size: 2em;"></i></button>
+            {% endif %}
+        {% endif %}
       </div>
     </div>
   </div>
 {%endmacro%}
 
-{% macro wide_card(movie)%}
+{% macro wide_card(movie,current_user)%}
+{%set default_src = url_for('static',filename='default-movie.png') %}
 <div class="col-lg-4 col-md-12 mb-4">
     <div class="card border  border-3 border-danger shadow-4-strong h-100">
       <div class="bg-image hover-overlay ripple" data-mdb-ripple-init data-mdb-ripple-color="light">
-        <img src="{{movie[5]}}" class="img-fluid" />
+        <img src="https://image.tmdb.org/t/p/original{{movie.poster_path}}" alt="Not Found" onerror="this.src='{{default_src}}';this.onerror=null" class="img-fluid" />
         <a href="#!">
           <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
         </a>
       </div>
       <div class="card-body">
-        <h5 class="card-title">{{movie[0]|title}}</h5><h6>{{movie[1]}}★</h6>
+        <h5 class="card-title">{{movie.title|title}}</h5><h6>{{"%.2f"|format(movie.vote_average)}}★</h6>
         <hr class="hr"/>
         <p class="card-text">
-          {{movie[3][:200]}}...
+          <p>{{movie.genres}}</p>
+          {{movie.overview[:200]}}...
         </p>
-        <a href="https://www.themoviedb.org/movie/{{movie[4]}}" target="_blank" class="btn btn-danger"  data-mdb-ripple-init>Read more</a>
+        <a href="https://www.themoviedb.org/movie/{{movie.id}}" target="_blank" class="btn btn-danger me-2"  data-mdb-ripple-init>Read more</a>
+        {% if current_user.is_authenticated %}
+            {% if movie in current_user.watchlist %}
+              <button class="btn btn-danger btn-floating" ><i class='fas fa-heart' style="font-size: 2em;"></i></button>
+            {% else %}
+              <button class="btn btn-danger btn-floating" onclick="watchlist_add(this,'{{movie.id}}')"><i class="far fa-heart " style="font-size: 2em;"></i></button>
+            {% endif %}
+        {% endif %}
       </div>
     </div>
   </div>

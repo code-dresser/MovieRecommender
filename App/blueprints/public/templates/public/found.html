@@ -3,6 +3,14 @@
 {% extends 'base.html' %}
 
 {% block style %}
+<script>
+ function watchlist_add(button,movie_id) {
+    $.get("/profile/add/" + movie_id, function(data) {
+        button.innerHTML = data;
+        button.onclick = null;
+    });
+}   
+</script>
   <style>
     #intro {
       /* Margin to fix overlapping fixed navbar */
@@ -14,6 +22,27 @@
         color: white !important;
       }
     }
+
+    .starrating > input {display: none;}  /* Remove radio buttons */
+
+.starrating > label:before { 
+  content: "\f005"; /* Star */
+  margin: 2px;
+  font-size: 3em;
+  font-family: FontAwesome;
+  display: inline-block; 
+}
+
+.starrating > label
+{
+  color: #222222; /* Start color when not clicked */
+}
+
+.starrating > input:checked ~ label
+{ color: #ffca08 ; } /* Set yellow color when star checked */
+
+.starrating > input:hover ~ label
+{ color: #ffca08 ;  } /* Set yellow color when star hover */
   </style>
 
 {% endblock %}
@@ -22,6 +51,9 @@
 <!--Main Navigation-->
 {% block content %}
 <!--Main layout-->
+{% if current_user.is_authenticated %}
+  {% include "_review_modal.html" %}
+{% endif %}
 <main class="my-5">
   <div class="container">
     <!--Section: Content-->
@@ -43,14 +75,13 @@
     <!--Section: Content-->
     <section class="text-center">
       <h4 class="mb-5 text-secondary"><strong>These may interest you:</strong></h4>
-      {% set movies_in_row = 3 %}
-      {% for i in range(movies|length // movies_in_row)%}
+        {% for movie_row in movies|batch(3) %}
         <div class="row">
-            {% for j in range(movies_in_row)%}
-                {%if j % 3 == 0%}
-                    {{cm.wide_card(movies[j + 3*i])}}
+            {% for i in range(movie_row|length)%}
+                {%if i % 3 == 0 %}
+                    {{cm.wide_card(movie_row[i],current_user)}}
                 {%else%}
-                    {{cm.small_card(movies[j + 3*i])}}
+                    {{cm.small_card(movie_row[i],current_user)}}
                 {%endif%}
             {%endfor%}
         </div>

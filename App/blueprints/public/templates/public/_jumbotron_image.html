@@ -1,12 +1,23 @@
+{%set default_src = url_for('static',filename='default-movie.png') %}
 <div id="intro" class="p-5  bg-black border border-secondary shadow-5 rounded mb-5" >
     <div class="row">
-      <div class="col-6">
-        <img class="img-fluid border border-3 border-danger " src="{{search[5]}}" style="max-height: 45vh;">
+      <div class="col-6 d-flex justify-content-center">
+        <img class="img-fluid border border-3 border-danger"  src="https://image.tmdb.org/t/p/original{{search[0].poster_path}}" alt="Not Found" onerror="this.src='{{default_src}}';this.onerror=null" style="max-height: 45vh;">
       </div>
       <div class="col-6">
-          <h1 class="my-3 text-white">{{search[0]|title}}</h1><h3 class="my-3 text-white">{{search[1]}}★</h3>
-          <h5 class="mb-3 text-secondary text-wrap">{{search[2]}}</h5>
-          <h5 class="mb-3 text-secondary text-wrap d-none d-md-block">{{search[3]}}</h5>
+          <h1 class="my-3 text-white">{{search[0].title|title}}</h1><h3 class="my-3 text-white">{{ "%.2f"|format(search[0].vote_average)}}★</h3>
+          <h5 class="mb-3 text-secondary text-wrap">{{search[0].genres}}</h5>
+          <h5 class="mb-3 text-secondary text-wrap d-none d-md-block">{{search[0].overview}}</h5>
+          {% if current_user.is_authenticated %}
+          <div>
+            <button class="btn btn-danger me-3" data-mdb-ripple-init data-mdb-modal-init data-mdb-target="#write_review"  onclick="$('#movie_id').val('{{search[0].id}}')">Write review</button>
+            {% if search[0] in current_user.watchlist %}
+              <button class="btn btn-danger btn-floating" ><i class='fas fa-heart' style="font-size: 2em;"></i></button>
+            {% else %}
+              <button class="btn btn-danger btn-floating" onclick="watchlist_add(this,'{{search[0].id}}')"><i class="far fa-heart " style="font-size: 2em;"></i></button>
+            {% endif %}
+          </div>
+          {% endif %}
       </div>
     </div>
   </div>

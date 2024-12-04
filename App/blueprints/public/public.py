@@ -25,19 +25,23 @@ def main():
     return render_template('index.html',movies=sublists)
 
 # Search results
-@public.route('/found', methods=['POST'])
+@public.route('/found', methods=['GET'])
 def recomendation():
-    prompt = " ".join(request.form['movie_name'].split()).lower()
-    if prompt in recomender.title_list:
-        # Movies recomendation
-        result_final = movie_info(recomender.recomend(prompt))
-        # Searched movie
-        search = movie_info(recomender.get_movie_id(prompt))
-        reviews = Movie.query.filter_by(title = prompt).first().reviews
-        return render_template('found.html',movies=result_final,search=search,reviews=reviews[:5])
+    form = ReviewForm()
+    prompt = " ".join(request.args.get('prompt',"",type=str).split()).lower()
+    if prompt != "":
+        if prompt in recomender.title_list:
+            # Movies recomendation
+            result_final = db.session.query(Movie).filter(Movie.id.in_(recomender.recomend(prompt))).all()
+            # Searched movie
+            search = Movie.query.filter_by(id =recomender.get_movie_id(prompt))
+            reviews = Movie.query.filter_by(title = prompt).first().reviews
+            return render_template('found.html',movies=result_final,search=search,reviews=reviews[:5],form=form)
+        else:
+            result_final = db.session.query(Movie).filter(Movie.id.in_(recomender.recomend(prompt))).all()
+            return render_template('found.html',movies=result_final,search_name=prompt.capitalize())
     else:
-        result_final = movie_info(recomender.get_keyword_recomendation(prompt))
-        return render_template('found.html',movies=result_final,search_name=prompt.capitalize())
+        return redirect(url_for("public.main"))
 
 # Public user page
 @public.route("/user/<username>",methods=['GET'])    
@@ -89,7 +93,7 @@ def edit_profile():
         flash("Couldnt edit your profile info")
     return redirect(url_for("public.profile"))
 
-# Add movies based on movie id
+# Add movies based on movie id (AJAX)
 @public.route("/profile/add/<id>",methods=['GET'])
 @login_required
 def watchlist_add(id):
@@ -97,7 +101,8 @@ def watchlist_add(id):
     if movie not in current_user.watchlist:
         current_user.watchlist.append(movie)
     db.session.commit()
-    return ""
+    return "<i class='fas fa-heart' 'style=font-size: 2em'></i>"
+
 #Add movie from form in profile page (AJAX)
 @public.route("/profile/add/movie",methods=['POST'])
 @login_required
@@ -161,22 +166,4 @@ def del_review(id):
 @public.route("/titles")
 def get_titles():
     return jsonify(recomender.get_suggestions())
-
-
-# Get movie info from id
-def movie_info(ids: list) -> list:
-    if isinstance(ids,list):
-        result = []
-        for id in ids:
-            movie = Movie.query.filter(Movie.id == id).first()
-            if movie:
-                poster_path = "https://image.tmdb.org/t/p/original" + movie.poster_path if movie.poster_path != "" else url_for('static',filename='default-movie.png')
-                result.append([movie.title,"{:.2f}".format(movie.vote_average),movie.genres,movie.overview,movie.id,poster_path])
-        return result
-    else:
-        movie = Movie.query.filter(Movie.id == ids).first()
-        print(movie)
-        if movie:
-            poster_path = "https://image.tmdb.org/t/p/original" + movie.poster_path if movie.poster_path != "" else url_for('static',filename='default-movie.png')
-            result = [movie.title,"{:.2f}".format(movie.vote_average),movie.genres,movie.overview,movie.id,poster_path]
-            return result   
+  
