@@ -1,6 +1,6 @@
 <div
   class="modal fade"
-  id="write_review"
+  id="edit_review"
   data-mdb-backdrop="static"
   data-mdb-keyboard="false"
   tabindex="-1"
@@ -10,25 +10,25 @@
   <div class="modal-dialog modal-dialog-centered  modal-lg modal-fullscreen-sm-down">
     <div class="modal-content bg-dark text-white">
       <div class="modal-header">
-        <h5 class="modal-title" id="staticBackdropLabel">Add review</h5>
+        <h5 class="modal-title" id="staticBackdropLabel">Edit Review</h5>
         <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal" aria-label="Close" onclick="$('input[name=\'rating\']').prop('checked', false);"></button>
       </div>
-      <form action="{{url_for('user.add_review')}}" method="post" enctype="multipart/form-data" id="reviewForm" novalidate>
+      <form action="{{url_for('user.add_review')}}" method="post" enctype="multipart/form-data" id="editForm" novalidate>
       <div class="modal-body">
           <!-- Title input -->
-          {{ form.csrf_token }}
-           {{form.movie_ID()}}
+          {{ e_form.csrf_token }}
+           {{e_form.review_id()}}
           <div data-mdb-input-init class="form-outline mb-4">
-            {{form.title(class_="form-control text-white")}}
-            <label class="form-label" for="title">Title</label>
+            {{e_form.title(class_="form-control text-white")}}
+            <label class="form-label" for="edit_review_title">Title</label>
           </div>
 
           <!-- Rating input -->
           <div data-mdb-input-init class="form-outline mb-4">
             <div class="container">
-              <div>Rating: </div>
+              <div>Rating </div>
               <div class="starrating risingstar d-flex justify-content-center flex-row-reverse">
-                {% for subfield in form.rating|reverse%}
+                {% for subfield in e_form.rating|reverse%}
                   {{subfield}}{{subfield.label}}
                 {% endfor %}
              </div>
@@ -37,14 +37,15 @@
 
           <!-- Message input -->
           <div data-mdb-input-init class="form-outline mb-4">
-             {{form.review_text(class_="form-control text-white",rows="4")}}
-            <label class="form-label" for="review_text">Review text</label>
+             {{e_form.review_text(class_="form-control text-white",rows="4")}}
+            <label class="form-label" for="edit_review_text">Treść recenzji</label>
           </div>
 
 
       </div>
       <div class="modal-footer">
-        {{form.submit(class_="btn btn-primary w-25",value="Save")}}
+
+        {{e_form.submit(class_="btn btn-primary w-25",value="Edit")}}
       </div>
     </form>
     </div>

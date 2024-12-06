@@ -17,10 +17,10 @@ $(document).ready( function() {
     );
 
     
-});
-
-    
+  });
 })
+
+
 function watchlist_del(movie_id) {
     $.get("/profile/del/" + movie_id, function(data) {
         $("#watchlist").html(data);
@@ -32,6 +32,15 @@ function review_del(movie_id) {
         $("#reviews").html(data);
     });
 }
+
+function review_info(id) {
+  $.get(`/profile/review/${id}/info`, function (data) {
+    $("#edit_review_title").val(data[0]);
+    $("#edit_review_text").val(data[1]);
+    $("#review_id").val(id);
+  })
+}
+
 
 
 
@@ -87,6 +96,7 @@ background: linear-gradient(to right bottom, rgba(121,24,9,1), rgba(0,5,6,1))
 
 <!-- Modals -->
 {% include '_review_modal.html' %}
+{% include '_edit_review_modal.html' %}
 {% include '_edit_user.html' %}
 <div class="container-fluid  text-secondary my-5 d-flex flex-column bg-black d-none d-md-block">
   <h2 class="text-white">Yours reviews </h2>

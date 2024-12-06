@@ -30,7 +30,7 @@
                         <p>{{review.review_text}}</p>
                     </div>
                     <div>
-                        <button class="btn btn-secondary">Edit review</button>
+                        <button class="btn btn-secondary" onclick="review_info('{{review.Review_ID}}')" data-mdb-ripple-init data-mdb-modal-init data-mdb-target="#edit_review" >Edit review</button>
                         <button onclick="review_del('{{review.Review_ID}}')" class="btn btn-primary">Delete review</button>
                     </div>
                 </div>

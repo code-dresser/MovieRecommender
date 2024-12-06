@@ -3,6 +3,7 @@ from flask_login import login_required,current_user
 from ...Models import Movie,Review,User
 from ...extentions import db
 from ...forms import ReviewForm,UserForm
+from .editReview import EditReviewForm
 
 
 user = Blueprint("user", __name__,template_folder="templates/user")
@@ -38,9 +39,10 @@ def profile():
     # Reviews navigation links
     next_url = url_for('user.profile',page=reviews.next_num) if reviews.has_next else None
     prev_url = url_for('user.profile', page=reviews.prev_num) if reviews.has_prev else None
-    form = ReviewForm()
+    e_form = EditReviewForm()
+    r_form = ReviewForm()
     u_form = UserForm()
-    return render_template("profile.html",form=form,u_form=u_form,reviews=reviews,next=next_url,prev=prev_url)
+    return render_template("profile.html",form=r_form,u_form=u_form,e_form=e_form,reviews=reviews,next=next_url,prev=prev_url)
 
 #Edit user data
 @user.route("/profile/edit",methods=["POST"])
@@ -94,6 +96,18 @@ def watchlist_del(id):
     db.session.commit()
     return render_template("_profile_watchlist.html")
 
+# Get review movie_id,title and text for edit form
+@user.route("/profile/review/<id>/info",methods=['GET'])
+@login_required
+def review_info(id):
+    review = Review.query.filter_by(Review_ID = id).first()
+    if review:
+        if review in current_user.reviews:
+            return jsonify([review.title,review.review_text,review.rating])
+        else:
+            return redirect(url_for('user.profile'))
+    else:
+        return redirect(url_for('user.profile'))
 
 # Add review for movie through review form
 @user.route("/profile/add/review",methods=['POST'])

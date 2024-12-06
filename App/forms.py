@@ -4,7 +4,7 @@ from wtforms.validators import InputRequired,DataRequired,Length
 
 class ReviewForm(FlaskForm):
 
-    movie_ID = HiddenField("movie_id",id="movie_id",validators=[DataRequired()])
+    movie_ID = HiddenField("movie_id",validators=[DataRequired()])
     title = StringField("title",validators=[DataRequired()])
     rating = RadioField("rating",choices=[(1,"1"),(2,"2"),(3,"3"),(4,"4"),(5,"5")])
     review_text = TextAreaField("Treść recenzji",validators=[DataRequired(),Length(min=1,max=250)])
