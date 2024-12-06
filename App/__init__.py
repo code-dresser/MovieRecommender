@@ -2,6 +2,7 @@ import flask
 from flask_login import current_user
 from .blueprints.public.public import public
 from .blueprints.auth.auth import auth
+from .blueprints.user.user import user
 from dotenv import load_dotenv
 from .extentions import db,bcrypt,login_manager
 from datetime import datetime, timezone
@@ -39,5 +40,6 @@ def create_app():
     # Set up the main route
     app.register_blueprint(public)
     app.register_blueprint(auth)
+    app.register_blueprint(user)
 
     return app

@@ -28,7 +28,7 @@
                     <div class="col-lg-10 col-xl-8">
                       <div class="row">
                         <div class="col-lg-4 d-flex justify-content-center">
-                            <a href="{{url_for('public.user',username=reviews[i].author.Username)}}">
+                            <a href="{{url_for('user.user_page',username=reviews[i].author.Username)}}">
                           <img src="{{reviews[i].author.avatar(100)}}"
                             class="rounded-circle shadow-1 mb-4 mb-lg-0" alt=" avatar" width="150"
                             height="150" />

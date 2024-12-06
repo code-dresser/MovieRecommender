@@ -9,7 +9,7 @@
               <h5>{{current_user.first_name}} {{current_user.last_name}}</h5>
               <p>Movie connoisseur</p>
               <i class="far fa-edit mb-3"  data-mdb-modal-init data-mdb-target="#edit_user"></i><br>
-              <a href="{{url_for('public.user',username=current_user.Username)}}" class="btn btn-info mb-3">Mobile view</a>
+              <a href="{{url_for('user.user_page',username=current_user.Username)}}" class="btn btn-info mb-3">Mobile view</a>
             </div>
             <div class="col-md-8">
               <div class="card-body p-4">

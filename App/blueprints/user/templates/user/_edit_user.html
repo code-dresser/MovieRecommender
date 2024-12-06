@@ -14,7 +14,7 @@
         <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form action="{{url_for('public.edit_profile')}}" method="POST" enctype="multipart/form-data" novalidate>
+        <form action="{{url_for('user.edit_profile')}}" method="POST" enctype="multipart/form-data" novalidate>
           {{ u_form.csrf_token }}
           <!-- 2 column grid layout with text inputs for the first and last names -->
           <div class="row mb-4">

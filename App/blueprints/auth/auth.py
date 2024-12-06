@@ -21,7 +21,7 @@ def login_page():
         else:
             login_user(user,remember=remember_me)
             print(email,password,remember_me)
-            return redirect(url_for("public.profile"))
+            return redirect(url_for("user.profile"))
     else:
         for error in login_form.errors.items():
             flash(f"{" ".join(error[1])}")

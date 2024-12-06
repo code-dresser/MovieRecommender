@@ -13,7 +13,7 @@
         <h5 class="modal-title" id="staticBackdropLabel">Dodaj Recenzję</h5>
         <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal" aria-label="Close"></button>
       </div>
-      <form action="{{url_for('public.add_review')}}" method="post" enctype="multipart/form-data" novalidate>
+      <form action="{{url_for('user.add_review')}}" method="post" enctype="multipart/form-data" novalidate>
       <div class="modal-body">
           <!-- Name input -->
           {{ form.csrf_token }}
