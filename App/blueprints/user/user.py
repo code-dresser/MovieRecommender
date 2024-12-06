@@ -50,14 +50,14 @@ def profile():
 def edit_profile():
     user =  User.query.filter(User.id == current_user.id).first_or_404()
     form = UserForm()
-    if form.validate_on_submit():
+    if form.validate_on_submit() and not User.query.filter_by(Email = form.email.data).all():
         user.first_name = form.first_name.data
         user.last_name = form.last_name.data
         user.Email = form.email.data
         user.Bio = form.Bio.data
         db.session.commit()
     else:
-        flash("Couldnt edit your profile info")
+        flash("Couldn't edit your profile info")
     return redirect(url_for("user.profile"))
 
 # Add movies based on movie id (AJAX)
@@ -108,6 +108,28 @@ def review_info(id):
             return redirect(url_for('user.profile'))
     else:
         return redirect(url_for('user.profile'))
+    
+# Edit user review
+@user.route("/profile/review/edit",methods=['POST'])
+@login_required
+def edit_review():
+    form = EditReviewForm()
+    if form.validate_on_submit():
+        id = form.review_id.data
+        review = Review.query.filter_by(Review_ID = id).first_or_404()
+        if review in current_user.reviews:
+            review.title = form.title.data
+            review.rating = form.rating.data
+            review.review_text = form.review_text.data
+            db.session.commit()
+        else:
+            pass
+        return redirect(url_for('user.profile'))
+    else:
+        flash("Error occured during review edition")
+        return redirect(url_for('user.profile'))
+        
+            
 
 # Add review for movie through review form
 @user.route("/profile/add/review",methods=['POST'])

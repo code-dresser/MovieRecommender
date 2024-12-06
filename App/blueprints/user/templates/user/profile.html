@@ -90,6 +90,18 @@ background: linear-gradient(to right bottom, rgba(121,24,9,1), rgba(0,5,6,1))
 
 <div class="container-fluid bg-image" id="image">
 <div class="bg-black text-white container-md my-5 py-5 rounded-3">
+  {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        <ul>
+          {% for message in messages %}
+            <li style="font-size: 12pt;">{{ message }}</li>
+          {% endfor %}
+        </ul>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+      </div>
+    {%endif%}
+  {%endwith%}
  <div>
   {% include '_profile_user_card.html' %}
  </div>
