@@ -9,7 +9,8 @@ class MovieRecomender:
 
     def __init__(self,movie_data,tfidf=True) -> None:
         self.vectorizer = TfidfVectorizer(stop_words='english',analyzer='word') if tfidf else CountVectorizer(stop_words="english")
-        self.movie_data = pd.read_csv(movie_data)
+        self.movie_data = pd.read_csv(movie_data).reset_index()
+        print(self.movie_data.head(5))
         self.tfid_vector = []
         self.similarity_matrix = []
         self.features = ''

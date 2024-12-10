@@ -14,6 +14,6 @@ class ReviewForm(FlaskForm):
 class UserForm(FlaskForm):
     first_name = StringField("first_name",validators=[DataRequired()])
     last_name = StringField("last_name",validators=[DataRequired()])
-    email = StringField("email",validators=[DataRequired()])
+    username = StringField("username",validators=[DataRequired()])
     Bio = TextAreaField("first_name",validators=[Length(min=0,max=500)])
     submit = SubmitField()

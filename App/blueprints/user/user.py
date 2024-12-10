@@ -50,10 +50,10 @@ def profile():
 def edit_profile():
     user =  User.query.filter(User.id == current_user.id).first_or_404()
     form = UserForm()
-    if form.validate_on_submit() and not User.query.filter_by(Email = form.email.data).all():
+    if form.validate_on_submit() and not User.query.filter_by(Username = form.username.data).all():
         user.first_name = form.first_name.data
         user.last_name = form.last_name.data
-        user.Email = form.email.data
+        user.Username = form.username.data
         user.Bio = form.Bio.data
         db.session.commit()
     else:

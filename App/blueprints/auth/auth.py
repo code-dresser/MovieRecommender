@@ -35,7 +35,7 @@ def signup_page():
         email= form.email.data
         password = form.password.data
         if User.query.filter_by(Email=email).first():
-            flash("User with this username already exist , you may want to login.")
+            flash("User with this email adress already exist , you may want to login.")
             return redirect(url_for('auth.signup_page'))
         else:
             user = User(Username=username,Email=email,Password=password,Password_hash=bcrypt.generate_password_hash(password,12))
