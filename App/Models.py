@@ -11,14 +11,14 @@ from hashlib import md5
 watchlist = db.Table(
     "Watchlist",
     db.Column("User_ID",db.Integer,db.ForeignKey('Users.id')),
-    db.Column("Movie_ID",db.Integer,db.ForeignKey('Movies.index')),
+    db.Column("Movie_ID",db.Integer,db.ForeignKey('Movies.id')),
 )
 
 class Review(db.Model):
     __tablename__ = "Reviews"
     Review_ID: so.Mapped[int] = so.mapped_column(primary_key=True)
     User_ID = db.Column("User_ID",db.Integer,db.ForeignKey('Users.id'))
-    Movie_ID = db.Column("Movie_ID",db.Integer,db.ForeignKey('Movies.index'))
+    Movie_ID = db.Column("Movie_ID",db.Integer,db.ForeignKey('Movies.id'))
     title:so.Mapped[str] = so.mapped_column(String(150))
     rating: so.Mapped[float] = so.mapped_column(nullable=False)
     review_text:so.Mapped[str] = so.mapped_column(String(400))
@@ -31,7 +31,6 @@ class User(UserMixin,db.Model):
     id :so.Mapped[int] = so.mapped_column(primary_key=True)
     Username :so.Mapped[str] = so.mapped_column(String(50),nullable=False)
     Email :so.Mapped[str] = so.mapped_column(String(100),nullable=False)
-    Password:so.Mapped[Optional[str]] = so.mapped_column(String(120),nullable=False)
     Password_hash:so.Mapped[Optional[str]] = so.mapped_column(String(120),nullable=False)
     Bio:so.Mapped[Optional[str]]= so.mapped_column(String(500),nullable=True)
     first_name:so.Mapped[Optional[str]]= so.mapped_column(String(150),nullable=True,default="Mystery")
@@ -61,17 +60,14 @@ class User(UserMixin,db.Model):
    
 class Movie(db.Model):
     __tablename__ = "Movies"
-    index: so.Mapped[int] = so.mapped_column(primary_key=True,nullable=False)
     id: so.Mapped[int] = so.mapped_column(primary_key=True,nullable=False)
     title: so.Mapped[str] = so.mapped_column(String(120),nullable=False)
     vote_average: so.Mapped[float] = so.mapped_column(nullable=True)
     vote_count: so.Mapped[float] = so.mapped_column(nullable=True)
-    #release_date: so.Mapped[str] = so.mapped_column(String(50),nullable=True)
     overview: so.Mapped[str] = so.mapped_column(nullable=True)
     tagline: so.Mapped[str] = so.mapped_column(String(120),nullable=True)
     genres: so.Mapped[str] = so.mapped_column(String(120),nullable=True)
     poster_path: so.Mapped[str] = so.mapped_column(String(150),nullable=True)
-    score: so.Mapped[float] = so.mapped_column(nullable=True)
     reviews = db.relationship("Review", backref='movie')
     def __repr__(self) -> str:
         return '<Movie {} {} {}>'.format(self.id,self.title,self.genres)

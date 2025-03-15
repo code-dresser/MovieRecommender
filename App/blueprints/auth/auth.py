@@ -20,7 +20,6 @@ def login_page():
             return redirect(url_for('auth.login_page'))
         else:
             login_user(user,remember=remember_me)
-            print(email,password,remember_me)
             return redirect(url_for("user.profile"))
     else:
         for error in login_form.errors.items():
@@ -35,13 +34,13 @@ def signup_page():
         email= form.email.data
         password = form.password.data
         if User.query.filter_by(Email=email).first():
-            flash("User with this email adress already exist , you may want to login.")
+            flash("User with this email address already exist , you may want to login.")
             return redirect(url_for('auth.signup_page'))
         else:
-            user = User(Username=username,Email=email,Password=password,Password_hash=bcrypt.generate_password_hash(password,12))
+            user = User(Username=username,Email=email,Password_hash=bcrypt.generate_password_hash(password,12))
             db.session.add(user)
             db.session.commit()
-            flash("User added sucessfully")
+            flash("User added successfully")
             return redirect(url_for("auth.login_page"))
     else:
         for error in form.errors.items():

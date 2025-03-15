@@ -50,14 +50,14 @@ def profile():
 def edit_profile():
     user =  User.query.filter(User.id == current_user.id).first_or_404()
     form = UserForm()
-    if form.validate_on_submit() and not User.query.filter_by(Username = form.username.data).all():
+    if form.validate_on_submit():
         user.first_name = form.first_name.data
         user.last_name = form.last_name.data
         user.Username = form.username.data
         user.Bio = form.Bio.data
         db.session.commit()
     else:
-        flash("Couldn't edit your profile info")
+        flash("Couldn't edit your profile info",form.errors.values())
     return redirect(url_for("user.profile"))
 
 # Add movies based on movie id (AJAX)
